@@ -13,7 +13,7 @@
             color: #24292e;
             margin: 0;
             padding: 0;
-            background-color: #f6f8fa;
+            background-color: #050505;
         }
 
         /* --- Auth UI Styles --- */
@@ -77,80 +77,254 @@
             margin-top: 10px;
         }
 
-        /* --- Main Content Styles --- */
+        /* --- Main TikTok-Style Interface Layout --- */
         #main-content {
             display: none; /* Hidden until logged in */
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            background-color: #ffffff;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            color: #ffffff;
             min-height: 100vh;
-            position: relative;
+            background-color: #000000;
         }
-        .header-bar {
+
+        /* Top Navigation Bar */
+        .top-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background-color: #000000;
+            border-bottom: 1px solid #222222;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #eaecef;
-            padding-bottom: 20px;
-            margin-bottom: 20px;
+            padding: 0 24px;
+            z-index: 1000;
+        }
+
+        .logo-area h2 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .logo-area span {
+            color: #00F5D4;
+        }
+
+        .search-box-container {
+            width: 360px;
+            position: relative;
+        }
+        .search-box-container input {
+            width: 100%;
+            background-color: #2f2f2f;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 92px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        #user-email-display {
+            color: #aaaaaa;
+            font-size: 13px;
         }
         #logout-btn {
-            background-color: #dc3545;
+            background-color: #fe2c55;
             color: white;
             border: none;
-            padding: 8px 16px;
+            padding: 6px 16px;
             border-radius: 4px;
+            font-weight: 600;
             cursor: pointer;
         }
-        p { margin-bottom: 16px; }
-        h3 {
-            border-bottom: 1px solid #eaecef;
-            padding-bottom: 0.3em;
-            margin-top: 24px;
-            margin-bottom: 16px;
+
+        /* Content Container Split */
+        .app-body {
+            display: flex;
+            padding-top: 60px;
+            height: calc(100vh - 60px);
         }
-        h4 { margin-top: 24px; margin-bottom: 16px; }
-        ul, ol { margin-bottom: 16px; padding-left: 30px; }
-        li { margin-bottom: 8px; }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-bottom: 24px;
+
+        /* Left Navigation Sidebar */
+        .left-sidebar {
+            width: 240px;
+            background-color: #000000;
+            padding: 20px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            border-right: 1px solid #121212;
+            overflow-y: auto;
+            flex-shrink: 0;
         }
-        th, td {
-            border: 1px solid #dfe2e5;
-            padding: 6px 13px;
-            text-align: left;
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 16px;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 18px;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
         }
-        th { background-color: #f6f8fa; font-weight: 600; }
-        pre {
-            background-color: #f6f8fa;
-            border-radius: 6px;
+        .sidebar-item:hover {
+            background-color: #121212;
+        }
+        .sidebar-item.active {
+            color: #fe2c55;
+        }
+        .sidebar-divider {
+            height: 1px;
+            background-color: #222222;
+            margin: 12px 16px;
+        }
+        .sidebar-footer {
             padding: 16px;
-            overflow: auto;
-            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
-            font-size: 85%;
-            line-height: 1.45;
+            font-size: 12px;
+            color: #555555;
+            line-height: 1.5;
+            margin-top: auto;
         }
-        code {
-            background-color: #f6f8fa;
-            border-radius: 3px;
-            padding: 0.2em 0.4em;
-            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
-            font-size: 85%;
+
+        /* Center Grid View Area */
+        .feed-container {
+            flex-grow: 1;
+            background-color: #000000;
+            overflow-y: auto;
+            padding: 24px;
         }
-        pre code {
+
+        /* Top Horizontal Category Tabs */
+        .category-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+        .tab-item {
+            background-color: #161616;
+            color: #ffffff;
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .tab-item.active {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        /* Photo/Video Grid Blocks */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 24px 16px;
+        }
+
+        .video-card {
             background-color: transparent;
-            padding: 0;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
         }
-        hr {
-            height: 0.25em;
-            padding: 0;
-            margin: 24px 0;
-            background-color: #e1e4e8;
-            border: 0;
+
+        .thumbnail-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 9 / 14;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #161616;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        /* Simulation placeholder styling for clips */
+        .thumbnail-wrapper .clip-bg {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1d1b26 0%, #0c0a12 100%);
+            border: 1px solid #222;
+            transition: transform 0.3s;
+        }
+        .video-card:hover .clip-bg {
+            transform: scale(1.03);
+        }
+
+        .thumbnail-wrapper .view-count {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+        }
+
+        .video-card .video-title {
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.4;
+            color: #ffffff;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-card .creator-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .video-card .creator-info .handle {
+            font-size: 13px;
+            font-weight: 600;
+            color: #bbbbbb;
+        }
+        .video-card .creator-info .badge {
+            width: 14px;
+            height: 14px;
+            background-color: #20d5ec;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 9px;
+            font-weight: bold;
+        }
+
+        /* Architectural / Code Spec Box Hidden by Default */
+        .blueprint-drawer {
+            display: none;
+            background-color: #111111;
+            border: 1px solid #222;
+            padding: 20px;
+            margin-top: 40px;
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -169,347 +343,184 @@
     </div>
 
     <div id="main-content">
-        <div class="header-bar">
-            <h2>CosmoClips Dashboard</h2>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <span id="user-email-display" style="color: #666; font-size: 0.9em;"></span>
+        <div class="top-navbar">
+            <div class="logo-area">
+                <h2>Cosmo<span>Clips</span></h2>
+            </div>
+            <div class="search-box-container">
+                <input type="text" placeholder="Search accounts and clips">
+            </div>
+            <div class="nav-actions">
+                <span id="user-email-display"></span>
                 <button id="logout-btn">Log Out</button>
             </div>
         </div>
 
-        <p>This is a massive and exciting undertaking. Building a system of this scale requires balancing hyper-optimized user experiences on the client side with aggressive, asynchronous processing on the backend.</p>
+        <div class="app-body">
+            <div class="left-sidebar">
+                <div class="sidebar-item active">
+                    <span style="font-size:20px;">🏠</span> For You
+                </div>
+                <div class="sidebar-item">
+                    <span style="font-size:20px;">🧭</span> Explore
+                </div>
+                <div class="sidebar-item">
+                    <span style="font-size:20px;">👥</span> Following
+                </div>
+                <div class="sidebar-item">
+                    <span style="font-size:20px;">🤝</span> Friends
+                </div>
+                <div class="sidebar-item">
+                    <span style="font-size:20px;">📺</span> LIVE
+                </div>
+                <div class="sidebar-item">
+                    <span style="font-size:20px;">💬</span> Messages
+                </div>
+                <div class="sidebar-item">
+                    <span style="font-size:20px;">🔔</span> Activity
+                </div>
+                <div class="sidebar-item">
+                    <span style="font-size:20px;">📤</span> Upload
+                </div>
+                <div class="sidebar-item" onclick="document.getElementById('tech-specs').style.display='block'">
+                    <span style="font-size:20px;">⚙️</span> Specs Arch
+                </div>
 
-        <p>Here is the comprehensive architectural and product blueprint for <strong>CosmoClips</strong>, a fully original, production-ready vertical video platform.</p>
+                <div class="sidebar-divider"></div>
+                
+                <div class="sidebar-footer">
+                    Company<br>
+                    Programme<br>
+                    Terms & Policies<br>
+                    <span style="color:#333;">© 2026 CosmoClips</span>
+                </div>
+            </div>
 
-        <hr>
+            <div class="feed-container">
+                <div class="category-tabs">
+                    <div class="tab-item">All</div>
+                    <div class="tab-item active">FIFA World Cup 2026™</div>
+                    <div class="tab-item">Singing & dancing</div>
+                    <div class="tab-item">Comedy</div>
+                    <div class="tab-item">Sports</div>
+                    <div class="tab-item">Anime & comics</div>
+                    <div class="tab-item">Relationship</div>
+                    <div class="tab-item">Lip-sync</div>
+                </div>
 
-        <h3><strong>1. Product Overview</strong></h3>
+                <div class="video-grid">
+                    
+                    <div class="video-card">
+                        <div class="thumbnail-wrapper">
+                            <div class="clip-bg" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.7)), url('https://picsum.photos/id/22/300/450'); background-size: cover;">⚡</div>
+                            <div class="view-count">▶ 247.1K</div>
+                        </div>
+                        <div class="video-title">YOUNGEST SQUAD IN THE TOURNAMENT! 🌎⚽</div>
+                        <div class="creator-info">
+                            <span class="handle">fifaworldcup</span><span class="badge">✓</span>
+                        </div>
+                    </div>
 
-        <p><strong>App Name:</strong> CosmoClips<br>
-        <strong>Core Philosophy:</strong> "Immersive connection, zero friction." CosmoClips strips away heavy UI chrome to focus entirely on full-bleed, high-definition content, utilizing gesture-based interactions rather than traditional tapping.</p>
+                    <div class="video-card">
+                        <div class="thumbnail-wrapper">
+                            <div class="clip-bg" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.7)), url('https://picsum.photos/id/43/300/450'); background-size: cover;">⚽</div>
+                            <div class="view-count">▶ 9145</div>
+                        </div>
+                        <div class="video-title">England need Henderson on the pitch for balance.</div>
+                        <div class="creator-info">
+                            <span class="handle">johnterry26</span><span class="badge">✓</span>
+                        </div>
+                    </div>
 
-        <p><strong>User Personas:</strong></p>
-        <ul>
-            <li><strong>The Drifter (Consumer):</strong> Wants immediate entertainment with zero cognitive load. Bounces quickly if content isn't relevant.</li>
-            <li><strong>The Artisan (Creator):</strong> Values high-quality video pipelines, precise control over their uploads, and deep analytics.</li>
-            <li><strong>The Connector (Engager):</strong> Uses the platform to communicate with friends, heavily utilizing the share and private-message features.</li>
-        </ul>
+                    <div class="video-card">
+                        <div class="thumbnail-wrapper">
+                            <div class="clip-bg" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.7)), url('https://picsum.photos/id/64/300/450'); background-size: cover;">🎬</div>
+                            <div class="view-count">▶ 14.1K</div>
+                        </div>
+                        <div class="video-title">When your vibe matches the dynamic energy perfectly...🎙️</div>
+                        <div class="creator-info">
+                            <span class="handle">alexiwobi</span><span class="badge">✓</span>
+                        </div>
+                    </div>
 
-        <p><strong>Core User Flow:</strong></p>
-        <ol>
-            <li><strong>Onboarding:</strong> 3-second interest selection (floating bubbles) &rarr; Immediate drop into the "Pulse" (Feed).</li>
-            <li><strong>Consumption:</strong> Vertical swipe to skip. Press and hold to pause. Double tap to "Spark" (Like).</li>
-            <li><strong>Upload:</strong> Tap the floating Action Ring &rarr; Select media &rarr; Auto-trim &rarr; Async upload via pre-signed URL while the user returns to the feed.</li>
-        </ol>
+                    <div class="video-card">
+                        <div class="thumbnail-wrapper">
+                            <div class="clip-bg" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.7)), url('https://picsum.photos/id/96/300/450'); background-size: cover;">📣</div>
+                            <div class="view-count">▶ 162.8K</div>
+                        </div>
+                        <div class="video-title">DECLAN RICE RAN OVER TO ME! Pure passion! 🔥</div>
+                        <div class="creator-info">
+                            <span class="handle">talksport</span><span class="badge">✓</span>
+                        </div>
+                    </div>
 
-        <hr>
+                    <div class="video-card">
+                        <div class="thumbnail-wrapper">
+                            <div class="clip-bg" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.7)), url('https://picsum.photos/id/103/300/450'); background-size: cover;">🏆</div>
+                            <div class="view-count">▶ 107.8K</div>
+                        </div>
+                        <div class="video-title">Score Final: Dramatic finish on matchday two!</div>
+                        <div class="creator-info">
+                            <span class="handle">equipede-foot...</span><span class="badge">✓</span>
+                        </div>
+                    </div>
 
-        <h3><strong>2. Design System & UI/UX</strong></h3>
+                    <div class="video-card">
+                        <div class="thumbnail-wrapper">
+                            <div class="clip-bg" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.7)), url('https://picsum.photos/id/177/300/450'); background-size: cover;">💼</div>
+                            <div class="view-count">▶ 7263</div>
+                        </div>
+                        <div class="video-title">Paid partnership setup behind the scenes.</div>
+                        <div class="creator-info">
+                            <span class="handle">england</span><span class="badge">✓</span>
+                        </div>
+                    </div>
 
-        <p>We must avoid copying the standard "right-aligned vertical button stack."</p>
+                    <div class="video-card">
+                        <div class="thumbnail-wrapper">
+                            <div class="clip-bg" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.7)), url('https://picsum.photos/id/237/300/450'); background-size: cover;">👨‍🍳</div>
+                            <div class="view-count">▶ 44.6K</div>
+                        </div>
+                        <div class="video-title">"BRILLIANT SQUAD!" Gordon shares thoughts.</div>
+                        <div class="creator-info">
+                            <span class="handle">talksport</span><span class="badge">✓</span>
+                        </div>
+                    </div>
 
-        <ul>
-            <li><strong>Original Interface Layout:</strong>
-                <ul>
-                    <li><strong>The Content:</strong> 100% edge-to-edge video. No safe-area blocking.</li>
-                    <li><strong>The "Halo" Nav:</strong> A dynamic, thumb-accessible semicircular dial at the bottom center of the screen. Swiping the dial left/right switches between "Following," "Pulse" (Trending), and "Local."</li>
-                    <li><strong>Interaction Drawer:</strong> Swiping <em>left</em> on the video pulls out the "Context Sheet" (glassmorphic overlay containing comments, shares, and the creator's profile ring).</li>
-                </ul>
-            </li>
-            <li><strong>Color Palette:</strong>
-                <ul>
-                    <li><strong>Background:</strong> Pitch Black (<code>#050505</code>) - True black for OLED power saving.</li>
-                    <li><strong>Primary Accent:</strong> Hyper-Violet (<code>#7B2CBF</code>) - Used for active states and the Action Ring.</li>
-                    <li><strong>Secondary:</strong> Cyan Glow (<code>#00F5D4</code>) - Used for notifications and "Sparks" (Likes).</li>
-                </ul>
-            </li>
-            <li><strong>Typography:</strong>
-                <ul>
-                    <li><em>Headings:</em> <strong>Space Grotesk</strong> (Modern, slightly geometric for creator handles).</li>
-                    <li><em>UI/Body:</em> <strong>Inter</strong> (Highly legible at small sizes for comments).</li>
-                </ul>
-            </li>
-        </ul>
+                    <div class="video-card">
+                        <div class="thumbnail-wrapper">
+                            <div class="clip-bg" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.7)), url('https://picsum.photos/id/249/300/450'); background-size: cover;">📝</div>
+                            <div class="view-count">▶ 743.6K</div>
+                        </div>
+                        <div class="video-title">Here we go! Exclusive signatures incoming. 🚀</div>
+                        <div class="creator-info">
+                            <span class="handle">fabrizioromano</span><span class="badge">✓</span>
+                        </div>
+                    </div>
 
-        <hr>
+                </div>
 
-        <h3><strong>3. System Architecture</strong></h3>
-
-        <p>We will use a <strong>Modular Monolith</strong> transitioning to <strong>Microservices</strong>. Starting with a modular monolith in Go allows for high iteration speed, which can be cleanly broken out into microservices as scaling limits are hit.</p>
-
-        <p><strong>Text-Based Architecture Diagram:</strong></p>
+                <div id="tech-specs" class="blueprint-drawer">
+                    <p>This is a massive and exciting undertaking. Building a system of this scale requires balancing hyper-optimized user experiences on the client side with aggressive, asynchronous processing on the backend.</p>
+                    <p>Here is the comprehensive architectural and product blueprint for <strong>CosmoClips</strong>, a fully original, production-ready vertical video platform.</p>
+                    <hr>
+                    <h3><strong>1. Product Overview</strong></h3>
+                    <p><strong>App Name:</strong> CosmoClips<br><strong>Core Philosophy:</strong> "Immersive connection, zero friction."</p>
+                    <h3><strong>3. System Architecture</strong></h3>
 <pre><code>[ Mobile Client (Flutter) ]
         |
-[ AWS API Gateway / Kong ] -- (Rate Limiting, JWT Auth)
-        |
-  +-----+-----+-----+-----+
-  |           |           |
-[Auth]      [Feed]      [Video] ---> [ Upload Queue (SQS) ]
- Service     Service     Service            |
-  |           |           |          [ FFmpeg Workers (Go/C++) ]
-[Postgres] [Redis]       [S3 Raw]           |
-          [Cassandra]                 [S3 Processed (HLS)]
-                                            |
-                                  [ Cloudflare CDN ] ---> [ Client ]</code></pre>
+[ AWS API Gateway / Kong ] -- (Rate Limiting, JWT Auth)</code></pre>
+                    <h3><strong>5. Recommendation Engine</strong></h3>
+                    <p>$$E(v_i | u_j) = w_1 \cdot P(WatchTime) + w_2 \cdot P(Spark) + w_3 \cdot P(Share) - \lambda \cdot P(Skip)$$</p>
+                    <h4>A. Backend Starter (Go / Fiber)</h4>
+<pre><code class="language-go">type Video struct { ID string `json:"video_id"`; Author string }</code></pre>
+                </div>
 
-        <ul>
-            <li><strong>Storage Strategy:</strong>
-                <ul>
-                    <li><strong>PostgreSQL:</strong> Relational data (User profiles, settings, follow graph).</li>
-                    <li><strong>Cassandra / ScyllaDB:</strong> High write-throughput data (Likes, comments, feed history).</li>
-                    <li><strong>Redis:</strong> Caching the hot-path feed, session data, and rate-limiting counters.</li>
-                </ul>
-            </li>
-        </ul>
-
-        <hr>
-
-        <h3><strong>4. Tech Stack</strong></h3>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Layer</th>
-                    <th>Technology</th>
-                    <th>Justification</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Frontend</strong></td>
-                    <td>Flutter</td>
-                    <td>Compiles to native ARM code. Unparalleled control over the render pipeline via Impeller, crucial for jank-free 60fps video scrolling.</td>
-                </tr>
-                <tr>
-                    <td><strong>Backend Core</strong></td>
-                    <td>Go (Golang)</td>
-                    <td>Incredible concurrency model (Goroutines). Low memory footprint, ideal for handling thousands of simultaneous feed connections.</td>
-                </tr>
-                <tr>
-                    <td><strong>ML / Algo</strong></td>
-                    <td>Python (PyTorch)</td>
-                    <td>Industry standard for building the recommendation engine and two-tower embeddings.</td>
-                </tr>
-                <tr>
-                    <td><strong>Video Pipeline</strong></td>
-                    <td>AWS Elemental + FFmpeg</td>
-                    <td>Hardware-accelerated transcoding to generate HLS streams rapidly.</td>
-                </tr>
-                <tr>
-                    <td><strong>Streaming</strong></td>
-                    <td>HLS (HTTP Live Streaming)</td>
-                    <td>Adaptive bitrate streaming ensures smooth playback on slow cellular networks.</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <hr>
-
-        <h3><strong>5. Recommendation Engine</strong></h3>
-
-        <p>CosmoClips uses a <strong>Two-Tower Neural Network architecture</strong> (Hybrid collaborative filtering + content-based).</p>
-
-        <p><strong>The Scoring Model:</strong><br>
-        To rank videos for a user's feed session, the system calculates an expected engagement score.</p>
-
-        <p>
-            $$E(v_i | u_j) = w_1 \cdot P(WatchTime) + w_2 \cdot P(Spark) + w_3 \cdot P(Share) - \lambda \cdot P(Skip)$$
-        </p>
-
-        <ul>
-            <li><em>Exploration vs Exploitation:</em> We use an \(\epsilon\)-greedy approach. 80% of the feed is optimized for max engagement (Exploitation), 20% injects random high-quality or new content to map the user's shifting interests (Exploration).</li>
-            <li><em>Cold Start:</em> New users receive a "Global Top 100" cluster, segmented by locale. Their first 10 swipes drastically shift their initial vector embedding.</li>
-        </ul>
-
-        <hr>
-
-        <h3><strong>6. Core API Design</strong></h3>
-
-        <p><strong>Endpoint:</strong> <code>GET /v1/feed/pulse</code><br>
-        Retrieves a batch of pre-computed video URLs for infinite scrolling.</p>
-
-        <p><strong>Response:</strong></p>
-<pre><code class="language-json">{
-  "session_id": "sess_9x81f2",
-  "videos": [
-    {
-      "video_id": "vid_772abc",
-      "author_handle": "@tech_guru",
-      "manifest_url": "https://cdn.cosmoclips.app/vid_772abc/master.m3u8",
-      "thumbnail_url": "https://cdn.cosmoclips.app/vid_772abc/thumb.jpg",
-      "spark_count": 14205,
-      "description": "Building a custom mechanical keyboard from scratch."
-    }
-  ],
-  "next_cursor": "eyJhbGciOiJIUzI1NiIsInR5cCI..."
-}</code></pre>
-
-        <hr>
-
-        <h3><strong>7. Video Pipeline</strong></h3>
-
-        <ol>
-            <li><strong>Request Upload:</strong> Client requests a pre-signed S3 URL from the Go backend.</li>
-            <li><strong>Direct-to-S3:</strong> Client uploads the raw <code>.mp4</code> directly to an AWS S3 Raw Bucket (bypassing our API servers).</li>
-            <li><strong>Event Trigger:</strong> S3 emits an EventBridge event to an AWS SQS queue.</li>
-            <li><strong>Transcoding:</strong> A fleet of spot instances picks up the queue. FFmpeg generates HLS playlists (<code>.m3u8</code>) and chunks (<code>.ts</code>) at 1080p, 720p, and 480p, plus a WebP thumbnail.</li>
-            <li><strong>Publish:</strong> Processed assets are moved to a public S3 bucket fronted by a CDN (Cloudflare). A webhook notifies the Go backend to mark the video as "Active".</li>
-        </ol>
-
-        <hr>
-
-        <h3><strong>8. Scalability & Performance</strong></h3>
-
-        <ul>
-            <li><strong>Handling 10M+ Users:</strong>
-                <ul>
-                    <li><strong>Pre-computing Feeds:</strong> We do not calculate the feed on the fly. Asynchronous background workers generate personalized feed queues and store them in Redis. When the client calls <code>/feed</code>, it just pops from the Redis list.</li>
-                    <li><strong>Read Replicas:</strong> PostgreSQL uses heavy read-replicas since social media is a 95% Read / 5% Write workload.</li>
-                    <li><strong>Consistent Hashing:</strong> Used to route specific video comment streams to dedicated WebSocket servers to prevent hot-partition bottlenecks.</li>
-                </ul>
-            </li>
-        </ul>
-
-        <hr>
-
-        <h3><strong>9. Security & Safety</strong></h3>
-
-        <ul>
-            <li><strong>Content Moderation:</strong>
-                <ul>
-                    <li><em>Automated:</em> All uploaded frames are sampled (1 frame per second) and run through an AI vision model (like AWS Rekognition) to detect NSFW content, violence, or hate symbols. Audio is transcribed and checked for banned keywords.</li>
-                    <li><em>Human:</em> Content flagged with a confidence score between 60%-90% is routed to a human review queue before broad distribution.</li>
-                </ul>
-            </li>
-            <li><strong>Abuse Detection:</strong> IP reputation tracking and device fingerprinting are used to shadowban bot nets attempting to manipulate the algorithm via fake "Sparks".</li>
-        </ul>
-
-        <hr>
-
-        <h3><strong>10. Codebase Starter</strong></h3>
-
-        <h4>A. Backend Starter (Go / Fiber)</h4>
-
-<pre><code class="language-go">package main
-
-import (
-	"log"
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/logger"
-)
-
-// Video structure mapped to DB
-type Video struct {
-	ID          string `json:"video_id"`
-	Author      string `json:"author_handle"`
-	ManifestURL string `json:"manifest_url"`
-}
-
-func main() {
-	app := fiber.New()
-	app.Use(logger.New())
-
-	v1 := app.Group("/v1")
-	
-	// Feed Endpoint
-	v1.Get("/feed/pulse", func(c *fiber.Ctx) error {
-		// Mock: In production, pop pre-computed list from Redis
-		videos := []Video{
-			{
-				ID:          "vid_101",
-				Author:      "@arch_engineer",
-				ManifestURL: "https://cdn.cosmoclips.app/vid_101/master.m3u8",
-			},
-		}
-		
-		return c.JSON(fiber.Map{
-			"status": "success",
-			"videos": videos,
-			"cursor": "next_page_token_xyz",
-		})
-	})
-
-	log.Fatal(app.Listen(":3000"))
-}</code></pre>
-
-        <h4>B. Database Schema (PostgreSQL)</h4>
-
-<pre><code class="language-sql">CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    handle VARCHAR(30) UNIQUE NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE videos (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    author_id UUID REFERENCES users(id),
-    status VARCHAR(20) DEFAULT 'processing', -- processing, active, flagged
-    manifest_url TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
--- Index for fast user profile video lookups
-CREATE INDEX idx_videos_author ON videos(author_id, created_at DESC);</code></pre>
-
-        <h4>C. Frontend Skeleton (Flutter)</h4>
-
-<pre><code class="language-dart">import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart'; // Abstraction over native players
-
-class PulseFeed extends StatefulWidget {
-  @override
-  _PulseFeedState createState() => _PulseFeedState();
-}
-
-class _PulseFeedState extends State<PulseFeed> {
-  final PageController _pageController = PageController();
-  List<String> videoManifests = []; // Fetched from Go API
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: PageView.builder(
-        scrollDirection: Axis.vertical,
-        controller: _pageController,
-        itemCount: 10, // Dynamic in production
-        itemBuilder: (context, index) {
-          // VideoPlayerWidget handles HLS streaming and caching natively
-          return Stack(
-            children: [
-              VideoPlayerWidget(url: videoManifests[index]),
-              _buildInteractionDrawer(), // The side-swipe glassmorphic UI
-            ],
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildInteractionDrawer() {
-    return Positioned(
-      bottom: 50,
-      right: 16,
-      child: Column(
-        children: [
-          IconButton(
-            icon: Icon(Icons.bolt, color: Color(0xFF00F5D4)), // 'Spark' Like
-            onPressed: () => print("Sparked!"),
-          ),
-          IconButton(
-            icon: Icon(Icons.comment, color: Colors.white),
-            onPressed: () => print("Open Context Sheet"),
-          ),
-        ],
-      ),
-    );
-  }
-}</code></pre>
-
+            </div>
+        </div>
     </div>
 
     <script type="module">
-        // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { 
             getAuth, 
@@ -519,7 +530,6 @@ class _PulseFeedState extends State<PulseFeed> {
             signOut 
         } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCCxvnFrVUzHzVX5CtgxVlrb_i4-gMwgks",
             authDomain: "cosmoclip-cec87.firebaseapp.com",
@@ -531,11 +541,9 @@ class _PulseFeedState extends State<PulseFeed> {
             measurementId: "G-TFBVGKRXM6"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // DOM Elements
         const authContainer = document.getElementById('auth-container');
         const mainContent = document.getElementById('main-content');
         const emailInput = document.getElementById('email');
@@ -546,15 +554,12 @@ class _PulseFeedState extends State<PulseFeed> {
         const errorDiv = document.getElementById('auth-error');
         const userEmailDisplay = document.getElementById('user-email-display');
 
-        // Monitor Auth State (Handles Persistence Automatically)
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // User is signed in
                 authContainer.style.display = 'none';
                 mainContent.style.display = 'block';
                 userEmailDisplay.textContent = `Logged in as: ${user.email}`;
             } else {
-                // User is signed out
                 authContainer.style.display = 'flex';
                 mainContent.style.display = 'none';
                 userEmailDisplay.textContent = '';
@@ -563,9 +568,8 @@ class _PulseFeedState extends State<PulseFeed> {
             }
         });
 
-        // Sign Up Logic
         signupBtn.addEventListener('click', () => {
-            errorDiv.textContent = ""; // clear previous errors
+            errorDiv.textContent = "";
             const email = emailInput.value;
             const password = passwordInput.value;
             
@@ -583,7 +587,6 @@ class _PulseFeedState extends State<PulseFeed> {
                 });
         });
 
-        // Log In Logic
         loginBtn.addEventListener('click', () => {
             errorDiv.textContent = "";
             const email = emailInput.value;
@@ -603,7 +606,6 @@ class _PulseFeedState extends State<PulseFeed> {
                 });
         });
 
-        // Log Out Logic
         logoutBtn.addEventListener('click', () => {
             signOut(auth).catch((error) => {
                 console.error("Logout Error:", error);
