@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vividly - Platform Blueprint</title>
+    <title>CosmoClips - Platform</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
@@ -11,10 +11,95 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.6;
             color: #24292e;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f8fa;
+        }
+
+        /* --- Auth UI Styles --- */
+        #auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #050505;
+            color: white;
+        }
+        .auth-box {
+            background-color: #1a1a1a;
+            padding: 40px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .auth-box h1 {
+            color: #7B2CBF;
+            margin-top: 0;
+        }
+        .auth-box input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #333;
+            border-radius: 6px;
+            background: #222;
+            color: white;
+            box-sizing: border-box;
+        }
+        .auth-box button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 6px;
+            background-color: #7B2CBF;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .auth-box button:hover {
+            background-color: #5a1e8c;
+        }
+        .auth-box .secondary-btn {
+            background-color: transparent;
+            border: 1px solid #7B2CBF;
+            color: #00F5D4;
+        }
+        #auth-error {
+            color: #ff4d4d;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        /* --- Main Content Styles --- */
+        #main-content {
+            display: none; /* Hidden until logged in */
             max-width: 900px;
             margin: 0 auto;
             padding: 40px 20px;
             background-color: #ffffff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            min-height: 100vh;
+            position: relative;
+        }
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eaecef;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        #logout-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
         }
         p { margin-bottom: 16px; }
         h3 {
@@ -68,67 +153,88 @@
 </head>
 <body>
 
-    <p>This is a massive and exciting undertaking. Building a system of this scale requires balancing hyper-optimized user experiences on the client side with aggressive, asynchronous processing on the backend.</p>
+    <div id="auth-container">
+        <div class="auth-box">
+            <h1>CosmoClips</h1>
+            <p style="color: #ccc; font-size: 0.9em;">Sign in to access the platform</p>
+            <input type="email" id="email" placeholder="Email Address" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button id="login-btn">Sign In</button>
+            <button id="signup-btn" class="secondary-btn">Create Account</button>
+            <div id="auth-error"></div>
+        </div>
+    </div>
 
-    <p>Here is the comprehensive architectural and product blueprint for <strong>Vividly</strong>, a fully original, production-ready vertical video platform.</p>
+    <div id="main-content">
+        <div class="header-bar">
+            <h2>CosmoClips Dashboard</h2>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span id="user-email-display" style="color: #666; font-size: 0.9em;"></span>
+                <button id="logout-btn">Log Out</button>
+            </div>
+        </div>
 
-    <hr>
+        <p>This is a massive and exciting undertaking. Building a system of this scale requires balancing hyper-optimized user experiences on the client side with aggressive, asynchronous processing on the backend.</p>
 
-    <h3><strong>1. Product Overview</strong></h3>
+        <p>Here is the comprehensive architectural and product blueprint for <strong>CosmoClips</strong>, a fully original, production-ready vertical video platform.</p>
 
-    <p><strong>App Name:</strong> Vividly<br>
-    <strong>Core Philosophy:</strong> "Immersive connection, zero friction." Vividly strips away heavy UI chrome to focus entirely on full-bleed, high-definition content, utilizing gesture-based interactions rather than traditional tapping.</p>
+        <hr>
 
-    <p><strong>User Personas:</strong></p>
-    <ul>
-        <li><strong>The Drifter (Consumer):</strong> Wants immediate entertainment with zero cognitive load. Bounces quickly if content isn't relevant.</li>
-        <li><strong>The Artisan (Creator):</strong> Values high-quality video pipelines, precise control over their uploads, and deep analytics.</li>
-        <li><strong>The Connector (Engager):</strong> Uses the platform to communicate with friends, heavily utilizing the share and private-message features.</li>
-    </ul>
+        <h3><strong>1. Product Overview</strong></h3>
 
-    <p><strong>Core User Flow:</strong></p>
-    <ol>
-        <li><strong>Onboarding:</strong> 3-second interest selection (floating bubbles) &rarr; Immediate drop into the "Pulse" (Feed).</li>
-        <li><strong>Consumption:</strong> Vertical swipe to skip. Press and hold to pause. Double tap to "Spark" (Like).</li>
-        <li><strong>Upload:</strong> Tap the floating Action Ring &rarr; Select media &rarr; Auto-trim &rarr; Async upload via pre-signed URL while the user returns to the feed.</li>
-    </ol>
+        <p><strong>App Name:</strong> CosmoClips<br>
+        <strong>Core Philosophy:</strong> "Immersive connection, zero friction." CosmoClips strips away heavy UI chrome to focus entirely on full-bleed, high-definition content, utilizing gesture-based interactions rather than traditional tapping.</p>
 
-    <hr>
+        <p><strong>User Personas:</strong></p>
+        <ul>
+            <li><strong>The Drifter (Consumer):</strong> Wants immediate entertainment with zero cognitive load. Bounces quickly if content isn't relevant.</li>
+            <li><strong>The Artisan (Creator):</strong> Values high-quality video pipelines, precise control over their uploads, and deep analytics.</li>
+            <li><strong>The Connector (Engager):</strong> Uses the platform to communicate with friends, heavily utilizing the share and private-message features.</li>
+        </ul>
 
-    <h3><strong>2. Design System & UI/UX</strong></h3>
+        <p><strong>Core User Flow:</strong></p>
+        <ol>
+            <li><strong>Onboarding:</strong> 3-second interest selection (floating bubbles) &rarr; Immediate drop into the "Pulse" (Feed).</li>
+            <li><strong>Consumption:</strong> Vertical swipe to skip. Press and hold to pause. Double tap to "Spark" (Like).</li>
+            <li><strong>Upload:</strong> Tap the floating Action Ring &rarr; Select media &rarr; Auto-trim &rarr; Async upload via pre-signed URL while the user returns to the feed.</li>
+        </ol>
 
-    <p>We must avoid copying the standard "right-aligned vertical button stack."</p>
+        <hr>
 
-    <ul>
-        <li><strong>Original Interface Layout:</strong>
-            <ul>
-                <li><strong>The Content:</strong> 100% edge-to-edge video. No safe-area blocking.</li>
-                <li><strong>The "Halo" Nav:</strong> A dynamic, thumb-accessible semicircular dial at the bottom center of the screen. Swiping the dial left/right switches between "Following," "Pulse" (Trending), and "Local."</li>
-                <li><strong>Interaction Drawer:</strong> Swiping <em>left</em> on the video pulls out the "Context Sheet" (glassmorphic overlay containing comments, shares, and the creator's profile ring).</li>
-            </ul>
-        </li>
-        <li><strong>Color Palette:</strong>
-            <ul>
-                <li><strong>Background:</strong> Pitch Black (<code>#050505</code>) - True black for OLED power saving.</li>
-                <li><strong>Primary Accent:</strong> Hyper-Violet (<code>#7B2CBF</code>) - Used for active states and the Action Ring.</li>
-                <li><strong>Secondary:</strong> Cyan Glow (<code>#00F5D4</code>) - Used for notifications and "Sparks" (Likes).</li>
-            </ul>
-        </li>
-        <li><strong>Typography:</strong>
-            <ul>
-                <li><em>Headings:</em> <strong>Space Grotesk</strong> (Modern, slightly geometric for creator handles).</li>
-                <li><em>UI/Body:</em> <strong>Inter</strong> (Highly legible at small sizes for comments).</li>
-            </ul>
-        </li>
-    </ul>
+        <h3><strong>2. Design System & UI/UX</strong></h3>
 
-    <hr>
+        <p>We must avoid copying the standard "right-aligned vertical button stack."</p>
 
-    <h3><strong>3. System Architecture</strong></h3>
+        <ul>
+            <li><strong>Original Interface Layout:</strong>
+                <ul>
+                    <li><strong>The Content:</strong> 100% edge-to-edge video. No safe-area blocking.</li>
+                    <li><strong>The "Halo" Nav:</strong> A dynamic, thumb-accessible semicircular dial at the bottom center of the screen. Swiping the dial left/right switches between "Following," "Pulse" (Trending), and "Local."</li>
+                    <li><strong>Interaction Drawer:</strong> Swiping <em>left</em> on the video pulls out the "Context Sheet" (glassmorphic overlay containing comments, shares, and the creator's profile ring).</li>
+                </ul>
+            </li>
+            <li><strong>Color Palette:</strong>
+                <ul>
+                    <li><strong>Background:</strong> Pitch Black (<code>#050505</code>) - True black for OLED power saving.</li>
+                    <li><strong>Primary Accent:</strong> Hyper-Violet (<code>#7B2CBF</code>) - Used for active states and the Action Ring.</li>
+                    <li><strong>Secondary:</strong> Cyan Glow (<code>#00F5D4</code>) - Used for notifications and "Sparks" (Likes).</li>
+                </ul>
+            </li>
+            <li><strong>Typography:</strong>
+                <ul>
+                    <li><em>Headings:</em> <strong>Space Grotesk</strong> (Modern, slightly geometric for creator handles).</li>
+                    <li><em>UI/Body:</em> <strong>Inter</strong> (Highly legible at small sizes for comments).</li>
+                </ul>
+            </li>
+        </ul>
 
-    <p>We will use a <strong>Modular Monolith</strong> transitioning to <strong>Microservices</strong>. Starting with a modular monolith in Go allows for high iteration speed, which can be cleanly broken out into microservices as scaling limits are hit.</p>
+        <hr>
 
-    <p><strong>Text-Based Architecture Diagram:</strong></p>
+        <h3><strong>3. System Architecture</strong></h3>
+
+        <p>We will use a <strong>Modular Monolith</strong> transitioning to <strong>Microservices</strong>. Starting with a modular monolith in Go allows for high iteration speed, which can be cleanly broken out into microservices as scaling limits are hit.</p>
+
+        <p><strong>Text-Based Architecture Diagram:</strong></p>
 <pre><code>[ Mobile Client (Flutter) ]
         |
 [ AWS API Gateway / Kong ] -- (Rate Limiting, JWT Auth)
@@ -143,91 +249,91 @@
                                             |
                                   [ Cloudflare CDN ] ---> [ Client ]</code></pre>
 
-    <ul>
-        <li><strong>Storage Strategy:</strong>
-            <ul>
-                <li><strong>PostgreSQL:</strong> Relational data (User profiles, settings, follow graph).</li>
-                <li><strong>Cassandra / ScyllaDB:</strong> High write-throughput data (Likes, comments, feed history).</li>
-                <li><strong>Redis:</strong> Caching the hot-path feed, session data, and rate-limiting counters.</li>
-            </ul>
-        </li>
-    </ul>
+        <ul>
+            <li><strong>Storage Strategy:</strong>
+                <ul>
+                    <li><strong>PostgreSQL:</strong> Relational data (User profiles, settings, follow graph).</li>
+                    <li><strong>Cassandra / ScyllaDB:</strong> High write-throughput data (Likes, comments, feed history).</li>
+                    <li><strong>Redis:</strong> Caching the hot-path feed, session data, and rate-limiting counters.</li>
+                </ul>
+            </li>
+        </ul>
 
-    <hr>
+        <hr>
 
-    <h3><strong>4. Tech Stack</strong></h3>
+        <h3><strong>4. Tech Stack</strong></h3>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Layer</th>
-                <th>Technology</th>
-                <th>Justification</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Frontend</strong></td>
-                <td>Flutter</td>
-                <td>Compiles to native ARM code. Unparalleled control over the render pipeline via Impeller, crucial for jank-free 60fps video scrolling.</td>
-            </tr>
-            <tr>
-                <td><strong>Backend Core</strong></td>
-                <td>Go (Golang)</td>
-                <td>Incredible concurrency model (Goroutines). Low memory footprint, ideal for handling thousands of simultaneous feed connections.</td>
-            </tr>
-            <tr>
-                <td><strong>ML / Algo</strong></td>
-                <td>Python (PyTorch)</td>
-                <td>Industry standard for building the recommendation engine and two-tower embeddings.</td>
-            </tr>
-            <tr>
-                <td><strong>Video Pipeline</strong></td>
-                <td>AWS Elemental + FFmpeg</td>
-                <td>Hardware-accelerated transcoding to generate HLS streams rapidly.</td>
-            </tr>
-            <tr>
-                <td><strong>Streaming</strong></td>
-                <td>HLS (HTTP Live Streaming)</td>
-                <td>Adaptive bitrate streaming ensures smooth playback on slow cellular networks.</td>
-            </tr>
-        </tbody>
-    </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>Layer</th>
+                    <th>Technology</th>
+                    <th>Justification</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Frontend</strong></td>
+                    <td>Flutter</td>
+                    <td>Compiles to native ARM code. Unparalleled control over the render pipeline via Impeller, crucial for jank-free 60fps video scrolling.</td>
+                </tr>
+                <tr>
+                    <td><strong>Backend Core</strong></td>
+                    <td>Go (Golang)</td>
+                    <td>Incredible concurrency model (Goroutines). Low memory footprint, ideal for handling thousands of simultaneous feed connections.</td>
+                </tr>
+                <tr>
+                    <td><strong>ML / Algo</strong></td>
+                    <td>Python (PyTorch)</td>
+                    <td>Industry standard for building the recommendation engine and two-tower embeddings.</td>
+                </tr>
+                <tr>
+                    <td><strong>Video Pipeline</strong></td>
+                    <td>AWS Elemental + FFmpeg</td>
+                    <td>Hardware-accelerated transcoding to generate HLS streams rapidly.</td>
+                </tr>
+                <tr>
+                    <td><strong>Streaming</strong></td>
+                    <td>HLS (HTTP Live Streaming)</td>
+                    <td>Adaptive bitrate streaming ensures smooth playback on slow cellular networks.</td>
+                </tr>
+            </tbody>
+        </table>
 
-    <hr>
+        <hr>
 
-    <h3><strong>5. Recommendation Engine</strong></h3>
+        <h3><strong>5. Recommendation Engine</strong></h3>
 
-    <p>Vividly uses a <strong>Two-Tower Neural Network architecture</strong> (Hybrid collaborative filtering + content-based).</p>
+        <p>CosmoClips uses a <strong>Two-Tower Neural Network architecture</strong> (Hybrid collaborative filtering + content-based).</p>
 
-    <p><strong>The Scoring Model:</strong><br>
-    To rank videos for a user's feed session, the system calculates an expected engagement score.</p>
+        <p><strong>The Scoring Model:</strong><br>
+        To rank videos for a user's feed session, the system calculates an expected engagement score.</p>
 
-    <p>
-        $$E(v_i | u_j) = w_1 \cdot P(WatchTime) + w_2 \cdot P(Spark) + w_3 \cdot P(Share) - \lambda \cdot P(Skip)$$
-    </p>
+        <p>
+            $$E(v_i | u_j) = w_1 \cdot P(WatchTime) + w_2 \cdot P(Spark) + w_3 \cdot P(Share) - \lambda \cdot P(Skip)$$
+        </p>
 
-    <ul>
-        <li><em>Exploration vs Exploitation:</em> We use an \(\epsilon\)-greedy approach. 80% of the feed is optimized for max engagement (Exploitation), 20% injects random high-quality or new content to map the user's shifting interests (Exploration).</li>
-        <li><em>Cold Start:</em> New users receive a "Global Top 100" cluster, segmented by locale. Their first 10 swipes drastically shift their initial vector embedding.</li>
-    </ul>
+        <ul>
+            <li><em>Exploration vs Exploitation:</em> We use an \(\epsilon\)-greedy approach. 80% of the feed is optimized for max engagement (Exploitation), 20% injects random high-quality or new content to map the user's shifting interests (Exploration).</li>
+            <li><em>Cold Start:</em> New users receive a "Global Top 100" cluster, segmented by locale. Their first 10 swipes drastically shift their initial vector embedding.</li>
+        </ul>
 
-    <hr>
+        <hr>
 
-    <h3><strong>6. Core API Design</strong></h3>
+        <h3><strong>6. Core API Design</strong></h3>
 
-    <p><strong>Endpoint:</strong> <code>GET /v1/feed/pulse</code><br>
-    Retrieves a batch of pre-computed video URLs for infinite scrolling.</p>
+        <p><strong>Endpoint:</strong> <code>GET /v1/feed/pulse</code><br>
+        Retrieves a batch of pre-computed video URLs for infinite scrolling.</p>
 
-    <p><strong>Response:</strong></p>
+        <p><strong>Response:</strong></p>
 <pre><code class="language-json">{
   "session_id": "sess_9x81f2",
   "videos": [
     {
       "video_id": "vid_772abc",
       "author_handle": "@tech_guru",
-      "manifest_url": "https://cdn.vividly.app/vid_772abc/master.m3u8",
-      "thumbnail_url": "https://cdn.vividly.app/vid_772abc/thumb.jpg",
+      "manifest_url": "https://cdn.cosmoclips.app/vid_772abc/master.m3u8",
+      "thumbnail_url": "https://cdn.cosmoclips.app/vid_772abc/thumb.jpg",
       "spark_count": 14205,
       "description": "Building a custom mechanical keyboard from scratch."
     }
@@ -235,52 +341,51 @@
   "next_cursor": "eyJhbGciOiJIUzI1NiIsInR5cCI..."
 }</code></pre>
 
-    <hr>
+        <hr>
 
-    <h3><strong>7. Video Pipeline</strong></h3>
+        <h3><strong>7. Video Pipeline</strong></h3>
 
-    <ol>
-        <li><strong>Request Upload:</strong> Client requests a pre-signed S3 URL from the Go backend.</li>
-        <li><strong>Direct-to-S3:</strong> Client uploads the raw <code>.mp4</code> directly to an AWS S3 Raw Bucket (bypassing our API servers).</li>
-        <li><strong>Event Trigger:</strong> S3 emits an EventBridge event to an AWS SQS queue.</li>
-        <li><strong>Transcoding:</strong> A fleet of spot instances picks up the queue. FFmpeg generates HLS playlists (<code>.m3u8</code>) and chunks (<code>.ts</code>) at 1080p, 720p, and 480p, plus a WebP thumbnail.</li>
-        <li><strong>Publish:</strong> Processed assets are moved to a public S3 bucket fronted by a CDN (Cloudflare). A webhook notifies the Go backend to mark the video as "Active".</li>
-    </ol>
+        <ol>
+            <li><strong>Request Upload:</strong> Client requests a pre-signed S3 URL from the Go backend.</li>
+            <li><strong>Direct-to-S3:</strong> Client uploads the raw <code>.mp4</code> directly to an AWS S3 Raw Bucket (bypassing our API servers).</li>
+            <li><strong>Event Trigger:</strong> S3 emits an EventBridge event to an AWS SQS queue.</li>
+            <li><strong>Transcoding:</strong> A fleet of spot instances picks up the queue. FFmpeg generates HLS playlists (<code>.m3u8</code>) and chunks (<code>.ts</code>) at 1080p, 720p, and 480p, plus a WebP thumbnail.</li>
+            <li><strong>Publish:</strong> Processed assets are moved to a public S3 bucket fronted by a CDN (Cloudflare). A webhook notifies the Go backend to mark the video as "Active".</li>
+        </ol>
 
-    <hr>
+        <hr>
 
-    <h3><strong>8. Scalability & Performance</strong></h3>
+        <h3><strong>8. Scalability & Performance</strong></h3>
 
-    <ul>
-        <li><strong>Handling 10M+ Users:</strong>
-            <ul>
-                <li><strong>Pre-computing Feeds:</strong> We do not calculate the feed on the fly. Asynchronous background workers generate personalized feed queues and store them in Redis. When the client calls <code>/feed</code>, it just pops from the Redis list.</li>
-                <li><strong>Read Replicas:</strong> PostgreSQL uses heavy read-replicas since social media is a 95% Read / 5% Write workload.</li>
-                <li><strong>Consistent Hashing:</strong> Used to route specific video comment streams to dedicated WebSocket servers to prevent hot-partition bottlenecks.</li>
-            </ul>
-        </li>
-    </ul>
+        <ul>
+            <li><strong>Handling 10M+ Users:</strong>
+                <ul>
+                    <li><strong>Pre-computing Feeds:</strong> We do not calculate the feed on the fly. Asynchronous background workers generate personalized feed queues and store them in Redis. When the client calls <code>/feed</code>, it just pops from the Redis list.</li>
+                    <li><strong>Read Replicas:</strong> PostgreSQL uses heavy read-replicas since social media is a 95% Read / 5% Write workload.</li>
+                    <li><strong>Consistent Hashing:</strong> Used to route specific video comment streams to dedicated WebSocket servers to prevent hot-partition bottlenecks.</li>
+                </ul>
+            </li>
+        </ul>
 
-    <hr>
+        <hr>
 
-    <h3><strong>9. Security & Safety</strong></h3>
+        <h3><strong>9. Security & Safety</strong></h3>
 
-    <ul>
-        <li><strong>Content Moderation:</strong>
-            <ul>
-                <li><em>Automated:</em> All uploaded frames are sampled (1 frame per second) and run through an AI vision model (like AWS Rekognition) to detect NSFW content, violence, or hate symbols. Audio is transcribed and checked for banned keywords.</li>
-                <li><em>Human:</em> Content flagged with a confidence score between 60%-90% is routed to a human review queue before broad distribution.</li>
-            </ul>
-        </li>
-        <li><strong>Abuse Detection:</strong> IP reputation tracking and device fingerprinting are used to shadowban bot nets attempting to manipulate the algorithm via fake "Sparks".</li>
-    </ul>
+        <ul>
+            <li><strong>Content Moderation:</strong>
+                <ul>
+                    <li><em>Automated:</em> All uploaded frames are sampled (1 frame per second) and run through an AI vision model (like AWS Rekognition) to detect NSFW content, violence, or hate symbols. Audio is transcribed and checked for banned keywords.</li>
+                    <li><em>Human:</em> Content flagged with a confidence score between 60%-90% is routed to a human review queue before broad distribution.</li>
+                </ul>
+            </li>
+            <li><strong>Abuse Detection:</strong> IP reputation tracking and device fingerprinting are used to shadowban bot nets attempting to manipulate the algorithm via fake "Sparks".</li>
+        </ul>
 
-    <hr>
+        <hr>
 
-    <h3><strong>10. Codebase Starter</strong></h3>
+        <h3><strong>10. Codebase Starter</strong></h3>
 
-    <h4>A. Backend Starter (Go / Fiber)</h4>
-    <p><em>Handles the high-performance feed retrieval.</em></p>
+        <h4>A. Backend Starter (Go / Fiber)</h4>
 
 <pre><code class="language-go">package main
 
@@ -310,7 +415,7 @@ func main() {
 			{
 				ID:          "vid_101",
 				Author:      "@arch_engineer",
-				ManifestURL: "https://cdn.vividly.app/vid_101/master.m3u8",
+				ManifestURL: "https://cdn.cosmoclips.app/vid_101/master.m3u8",
 			},
 		}
 		
@@ -324,7 +429,7 @@ func main() {
 	log.Fatal(app.Listen(":3000"))
 }</code></pre>
 
-    <h4>B. Database Schema (PostgreSQL)</h4>
+        <h4>B. Database Schema (PostgreSQL)</h4>
 
 <pre><code class="language-sql">CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -343,8 +448,7 @@ CREATE TABLE videos (
 -- Index for fast user profile video lookups
 CREATE INDEX idx_videos_author ON videos(author_id, created_at DESC);</code></pre>
 
-    <h4>C. Frontend Skeleton (Flutter)</h4>
-    <p><em>Implements the infinite vertical pager.</em></p>
+        <h4>C. Frontend Skeleton (Flutter)</h4>
 
 <pre><code class="language-dart">import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart'; // Abstraction over native players
@@ -399,39 +503,109 @@ class _PulseFeedState extends State<PulseFeed> {
   }
 }</code></pre>
 
-    <h4>D. Feed Algorithm Concept (Python)</h4>
-    <p><em>Calculates the heuristic engagement score for ranking.</em></p>
+    </div>
 
-<pre><code class="language-python">import math
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword, 
+            onAuthStateChanged, 
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-def calculate_video_score(video_stats, user_affinity):
-    """
-    video_stats: dict containing watch_time, spark_rate, share_rate, time_decay
-    user_affinity: float 0.0 to 1.0 representing vector similarity
-    """
-    # Weights optimized via historical ML models
-    w_watch = 0.5
-    w_spark = 0.3
-    w_share = 0.2
-    
-    # Calculate base engagement probability
-    engagement = (
-        (video_stats['avg_watch_time_pct'] * w_watch) + 
-        (video_stats['spark_rate'] * w_spark) + 
-        (video_stats['share_rate'] * w_share)
-    )
-    
-    # Apply Gravity (Time Decay) - newer videos get a slight boost
-    age_in_hours = video_stats['age_hours']
-    time_penalty = math.exp(-0.05 * age_in_hours) 
-    
-    # Final score combines global engagement, personal affinity, and freshness
-    final_score = (engagement * user_affinity) * time_penalty
-    
-    return final_score
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCCxvnFrVUzHzVX5CtgxVlrb_i4-gMwgks",
+            authDomain: "cosmoclip-cec87.firebaseapp.com",
+            databaseURL: "https://cosmoclip-cec87-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "cosmoclip-cec87",
+            storageBucket: "cosmoclip-cec87.firebasestorage.app",
+            messagingSenderId: "542111182624",
+            appId: "1:542111182624:web:8bc7529dcd5e38d42e3145",
+            measurementId: "G-TFBVGKRXM6"
+        };
 
-# Example usage for ranking a candidate pool
-candidate_videos.sort(key=lambda v: calculate_video_score(v.stats, v.user_affinity), reverse=True)</code></pre>
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
+        // DOM Elements
+        const authContainer = document.getElementById('auth-container');
+        const mainContent = document.getElementById('main-content');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('login-btn');
+        const signupBtn = document.getElementById('signup-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const errorDiv = document.getElementById('auth-error');
+        const userEmailDisplay = document.getElementById('user-email-display');
+
+        // Monitor Auth State (Handles Persistence Automatically)
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in
+                authContainer.style.display = 'none';
+                mainContent.style.display = 'block';
+                userEmailDisplay.textContent = `Logged in as: ${user.email}`;
+            } else {
+                // User is signed out
+                authContainer.style.display = 'flex';
+                mainContent.style.display = 'none';
+                userEmailDisplay.textContent = '';
+                emailInput.value = '';
+                passwordInput.value = '';
+            }
+        });
+
+        // Sign Up Logic
+        signupBtn.addEventListener('click', () => {
+            errorDiv.textContent = ""; // clear previous errors
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            
+            if(!email || !password) {
+                errorDiv.textContent = "Please enter an email and password.";
+                return;
+            }
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    console.log("Account created successfully!");
+                })
+                .catch((error) => {
+                    errorDiv.textContent = error.message;
+                });
+        });
+
+        // Log In Logic
+        loginBtn.addEventListener('click', () => {
+            errorDiv.textContent = "";
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            if(!email || !password) {
+                errorDiv.textContent = "Please enter an email and password.";
+                return;
+            }
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    console.log("Logged in successfully!");
+                })
+                .catch((error) => {
+                    errorDiv.textContent = error.message;
+                });
+        });
+
+        // Log Out Logic
+        logoutBtn.addEventListener('click', () => {
+            signOut(auth).catch((error) => {
+                console.error("Logout Error:", error);
+            });
+        });
+    </script>
 </body>
 </html>
