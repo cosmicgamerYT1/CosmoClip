@@ -128,23 +128,69 @@
             outline: none;
         }
 
+        /* Updated Profile Header Actions */
         .nav-actions {
             display: flex;
             align-items: center;
             gap: 16px;
+            position: relative;
         }
-        #user-email-display {
-            color: #aaaaaa;
-            font-size: 13px;
+        .header-profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            object-fit: cover;
+            border: 2px solid transparent;
+            transition: border-color 0.2s;
         }
-        #logout-btn {
-            background-color: #fe2c55;
+        .header-profile-pic:hover {
+            border-color: #7B2CBF;
+        }
+        .profile-dropdown {
+            position: absolute;
+            right: 0;
+            top: 50px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 8px;
+            width: 160px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+            z-index: 1001;
+        }
+        .profile-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .profile-dropdown button {
+            background: transparent;
             color: white;
             border: none;
-            padding: 6px 16px;
+            padding: 10px 12px;
+            text-align: left;
+            cursor: pointer;
             border-radius: 4px;
             font-weight: 600;
-            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .profile-dropdown button:hover {
+            background: #333;
+        }
+        .profile-dropdown #logout-btn {
+            color: #fe2c55;
+            margin-top: 4px;
+            border-top: 1px solid #333;
+            border-radius: 0 0 4px 4px;
         }
 
         /* Content Container Split */
@@ -319,14 +365,15 @@
             font-weight: bold;
         }
 
-        /* Architectural / Code Spec Box */
+        /* Architectural / Code Spec Box -> Converted to Settings Box */
         .blueprint-drawer {
             display: none;
             background-color: #111111;
             border: 1px solid #222;
-            padding: 20px;
-            margin-top: 40px;
+            padding: 30px;
+            margin-top: 20px;
             border-radius: 8px;
+            max-width: 600px;
         }
 
         /* --- Empty State Templates --- */
@@ -341,6 +388,20 @@
             color: #ffffff;
             margin-bottom: 8px;
             font-weight: 500;
+        }
+
+        /* Profile Page Header Styling */
+        #profile-view-panel {
+            text-align: left;
+            padding: 40px;
+        }
+        .profile-header-info {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 30px;
         }
 
         /* --- Slide Out Panel Drawers (Messages & Activity) --- */
@@ -520,8 +581,11 @@
                 <input type="text" placeholder="Search accounts and clips">
             </div>
             <div class="nav-actions">
-                <span id="user-email-display"></span>
-                <button id="logout-btn">Log Out</button>
+                <img id="header-profile-pic" class="header-profile-pic" src="https://ui-avatars.com/api/?name=User&background=222&color=fff" alt="Profile">
+                <div id="profile-dropdown" class="profile-dropdown">
+                    <button id="view-profile-btn">View Profile</button>
+                    <button id="logout-btn">Sign Out</button>
+                </div>
             </div>
         </div>
 
@@ -552,7 +616,7 @@
                     <span style="font-size:20px;">📤</span> Upload
                 </div>
                 <div class="sidebar-item">
-                    <span style="font-size:20px;">⚙️</span> Specs Arch
+                    <span style="font-size:20px;">⚙️</span> Settings
                 </div>
 
                 <div class="sidebar-divider"></div>
@@ -606,6 +670,24 @@
                 <div id="coming-soon-panel" style="display: none; padding: 40px; text-align: center; color: #888;">
                     <h2 id="coming-soon-title" style="font-weight: 400; margin-bottom: 10px;">View Coming Soon</h2>
                     <p>This panel is currently being engineered. Check back updates shortly!</p>
+                </div>
+
+                <div id="profile-view-panel" class="empty-view-state" style="display: none;">
+                    <div class="profile-header-info">
+                        <img id="profile-page-pic" src="https://ui-avatars.com/api/?name=User&background=222&color=fff" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #333;">
+                        <div>
+                            <h2 id="profile-page-username" style="color: white; margin: 0 0 8px 0; font-size: 32px;">Username</h2>
+                            <div style="display: flex; gap: 16px; color: #aaa; font-size: 14px;">
+                                <span><strong style="color: white;">0</strong> Following</span>
+                                <span><strong style="color: white;">0</strong> Followers</span>
+                                <span><strong style="color: white;">0</strong> Likes</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 60px;">
+                        <h3 style="font-size: 20px; color: #ffffff; margin-bottom: 8px; font-weight: 500;">No videos uploaded yet</h3>
+                        <p style="color: #888888;">Upload your first video to start building your profile.</p>
+                    </div>
                 </div>
 
                 <div id="following-empty-state" class="empty-view-state">
@@ -739,20 +821,21 @@
 
                 </div>
 
-                <div id="tech-specs" class="blueprint-drawer">
-                    <p>This is a massive and exciting undertaking. Building a system of this scale requires balancing hyper-optimized user experiences on the client side with aggressive, asynchronous processing on the backend.</p>
-                    <p>Here is the comprehensive architectural and product blueprint for <strong>CosmoClips</strong>, a fully original, production-ready vertical video platform.</p>
-                    <hr>
-                    <h3><strong>1. Product Overview</strong></h3>
-                    <p><strong>App Name:</strong> CosmoClips<br><strong>Core Philosophy:</strong> "Immersive connection, zero friction."</p>
-                    <h3><strong>3. System Architecture</strong></h3>
-<pre><code>[ Mobile Client (Flutter) ]
-        |
-[ AWS API Gateway / Kong ] -- (Rate Limiting, JWT Auth)</code></pre>
-                    <h3><strong>5. Recommendation Engine</strong></h3>
-                    <p>$$E(v_i | u_j) = w_1 \cdot P(WatchTime) + w_2 \cdot P(Spark) + w_3 \cdot P(Share) - \lambda \cdot P(Skip)$$</p>
-                    <h4>A. Backend Starter (Go / Fiber)</h4>
-<pre><code class="language-go">type Video struct { ID string `json:"video_id"`; Author string }</code></pre>
+                <div id="settings-panel" class="blueprint-drawer">
+                    <h2 style="margin-top: 0;">Account Settings</h2>
+                    <div style="margin-bottom: 24px;">
+                        <label style="display: block; margin-bottom: 8px; color: #aaa; font-weight: 600;">Profile Picture</label>
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <img id="settings-preview-pic" src="https://ui-avatars.com/api/?name=User&background=222&color=fff" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #333;">
+                            <input type="file" id="profile-pic-upload" accept="image/*" style="color: white; background: #222; padding: 8px; border-radius: 6px;">
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 24px;">
+                        <label style="display: block; margin-bottom: 8px; color: #aaa; font-weight: 600;">Username</label>
+                        <input type="text" id="settings-username-input" style="width: 100%; max-width: 320px; padding: 12px; border-radius: 6px; border: 1px solid #333; background: #222; color: white; outline: none;">
+                    </div>
+                    <button id="save-settings-btn" style="background-color: #00F5D4; color: #000; font-weight: bold; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; transition: background 0.2s;">Save Changes</button>
+                    <div id="settings-message" style="margin-top: 16px; font-size: 14px;"></div>
                 </div>
 
             </div>
@@ -791,18 +874,34 @@
         const passwordInput = document.getElementById('password');
         const loginBtn = document.getElementById('login-btn');
         const signupBtn = document.getElementById('signup-btn');
-        const logoutBtn = document.getElementById('logout-btn');
         const errorDiv = document.getElementById('auth-error');
-        const userEmailDisplay = document.getElementById('user-email-display');
 
         // Layout Elements for Navigation Logic
         const sidebarItems = document.querySelectorAll('.sidebar-item');
         const categoryTabs = document.querySelector('.category-tabs');
         const videoGrid = document.querySelector('.video-grid');
-        const techSpecs = document.getElementById('tech-specs');
+        const settingsPanel = document.getElementById('settings-panel');
+        const profileViewPanel = document.getElementById('profile-view-panel');
         const comingSoonPanel = document.getElementById('coming-soon-panel');
         const comingSoonTitle = document.getElementById('coming-soon-title');
         const logoHomeTrigger = document.getElementById('logo-home-trigger');
+
+        // Profile Nav Elements
+        const headerProfilePic = document.getElementById('header-profile-pic');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        const viewProfileBtn = document.getElementById('view-profile-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        // Settings Elements
+        const profilePicUpload = document.getElementById('profile-pic-upload');
+        const settingsPreviewPic = document.getElementById('settings-preview-pic');
+        const settingsUsernameInput = document.getElementById('settings-username-input');
+        const saveSettingsBtn = document.getElementById('save-settings-btn');
+        const settingsMessage = document.getElementById('settings-message');
+
+        // Profile Page Elements
+        const profilePagePic = document.getElementById('profile-page-pic');
+        const profilePageUsername = document.getElementById('profile-page-username');
 
         // New Interactive State Elements
         const followingEmptyState = document.getElementById('following-empty-state');
@@ -813,31 +912,68 @@
         const closeMessagesBtn = document.getElementById('close-messages-btn');
         const closeActivityBtn = document.getElementById('close-activity-btn');
 
+        let newProfilePicBase64 = null;
+
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 authContainer.style.display = 'none';
                 mainContent.style.display = 'block';
-                // Only displays your chosen username cleanly
-                userEmailDisplay.textContent = `Signed in as: ${user.displayName || 'User'}`;
+                
+                // Populate Profile Data safely
+                const displayAvatar = user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || 'User'}&background=222&color=fff`;
+                const displayUser = user.displayName || 'User';
+
+                headerProfilePic.src = displayAvatar;
+                settingsPreviewPic.src = displayAvatar;
+                profilePagePic.src = displayAvatar;
+                
+                settingsUsernameInput.value = displayUser;
+                profilePageUsername.textContent = displayUser;
+
             } else {
                 authContainer.style.display = 'flex';
                 mainContent.style.display = 'none';
-                userEmailDisplay.textContent = '';
                 emailInput.value = '';
                 passwordInput.value = '';
                 usernameInput.value = '';
+                profileDropdown.classList.remove('show');
             }
+        });
+
+        // Dropdown toggle logic
+        headerProfilePic.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            if (profileDropdown.classList.contains('show')) {
+                profileDropdown.classList.remove('show');
+            }
+        });
+
+        // View Profile Dropdown Action
+        viewProfileBtn.addEventListener('click', () => {
+            sidebarItems.forEach(i => i.classList.remove('active'));
+            resetAllViewContainers();
+            profileViewPanel.style.display = 'block';
+            profileDropdown.classList.remove('show');
+            messagesDrawer.classList.remove('open');
+            activityDrawer.classList.remove('open');
         });
 
         // Dynamic View Reset Helper
         function resetAllViewContainers() {
             categoryTabs.style.display = 'none';
             videoGrid.style.display = 'none';
-            techSpecs.style.display = 'none';
+            settingsPanel.style.display = 'none';
+            profileViewPanel.style.display = 'none';
             comingSoonPanel.style.display = 'none';
             followingEmptyState.style.display = 'none';
             friendsEmptyState.style.display = 'none';
             immersiveLivePanel.style.display = 'none';
+            settingsMessage.textContent = "";
         }
 
         // Resets layout instantly to your standard "For You" platform feed
@@ -883,7 +1019,6 @@
                 resetAllViewContainers();
 
                 if (tabCleanName === "For You" || tabCleanName === "Explore") {
-                    // Explore tab displays exact duplicate structure matching primary For You feed grid
                     categoryTabs.style.display = 'flex';
                     videoGrid.style.display = 'grid';
                 } else if (tabCleanName === "Following") {
@@ -892,13 +1027,68 @@
                     friendsEmptyState.style.display = 'block';
                 } else if (tabCleanName === "LIVE") {
                     immersiveLivePanel.style.display = 'grid';
-                } else if (tabCleanName === "Specs Arch") {
-                    techSpecs.style.display = 'block';
+                } else if (tabCleanName === "Settings") {
+                    settingsPanel.style.display = 'block';
                 } else {
                     comingSoonPanel.style.display = 'block';
                     comingSoonTitle.textContent = `${tabCleanName} View Coming Soon`;
                 }
             });
+        });
+
+        // Profile Picture File Upload Preview
+        profilePicUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    newProfilePicBase64 = event.target.result;
+                    settingsPreviewPic.src = newProfilePicBase64;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Save Settings Action
+        saveSettingsBtn.addEventListener('click', async () => {
+            if (!auth.currentUser) return;
+            
+            settingsMessage.textContent = "Saving changes...";
+            settingsMessage.style.color = "#aaa";
+
+            try {
+                const updates = {};
+                const newUsername = settingsUsernameInput.value.trim();
+                
+                if (newUsername !== "") {
+                    updates.displayName = newUsername;
+                }
+                if (newProfilePicBase64) {
+                    updates.photoURL = newProfilePicBase64;
+                }
+
+                if (Object.keys(updates).length > 0) {
+                    await updateProfile(auth.currentUser, updates);
+                    
+                    // Immediately visually update the DOM without needing a full page reload
+                    if (updates.photoURL) {
+                        headerProfilePic.src = updates.photoURL;
+                        profilePagePic.src = updates.photoURL;
+                    }
+                    if (updates.displayName) {
+                        profilePageUsername.textContent = updates.displayName;
+                    }
+                    
+                    settingsMessage.textContent = "Settings successfully updated!";
+                    settingsMessage.style.color = "#00F5D4";
+                } else {
+                    settingsMessage.textContent = "No changes were made.";
+                    settingsMessage.style.color = "#ff4d4d";
+                }
+            } catch (error) {
+                settingsMessage.textContent = "Error updating profile: " + error.message;
+                settingsMessage.style.color = "#ff4d4d";
+            }
         });
 
         signupBtn.addEventListener('click', async () => {
