@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CosmoClips - Platform</title>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/polyfill/3.41.0/polyfill.min.js"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         body {
@@ -14,6 +14,7 @@
             margin: 0;
             padding: 0;
             background-color: #050505;
+            overflow: hidden;
         }
 
         /* --- Auth UI Styles --- */
@@ -151,6 +152,7 @@
             display: flex;
             padding-top: 60px;
             height: calc(100vh - 60px);
+            position: relative;
         }
 
         /* Left Navigation Sidebar */
@@ -204,6 +206,7 @@
             background-color: #000000;
             overflow-y: auto;
             padding: 24px;
+            height: calc(100% - 48px);
         }
 
         /* Top Horizontal Category Tabs */
@@ -325,6 +328,172 @@
             margin-top: 40px;
             border-radius: 8px;
         }
+
+        /* --- Empty State Templates --- */
+        .empty-view-state {
+            display: none;
+            text-align: center;
+            padding: 80px 20px;
+            color: #888888;
+        }
+        .empty-view-state h3 {
+            font-size: 20px;
+            color: #ffffff;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        /* --- Slide Out Panel Drawers (Messages & Activity) --- */
+        .sliding-sidebar-drawer {
+            position: absolute;
+            top: 60px;
+            right: -360px;
+            width: 330px;
+            height: calc(100vh - 60px);
+            background-color: #000000;
+            border-left: 1px solid #222222;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 999;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .sliding-sidebar-drawer.open {
+            transform: translateX(-360px);
+        }
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .drawer-header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .close-drawer-btn {
+            background: #222222;
+            border: none;
+            color: #ffffff;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        /* Messages Layout Specifics */
+        .message-item-placeholder {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: #121212;
+            padding: 12px;
+            border-radius: 8px;
+            color: #888888;
+        }
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #222222;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* Activity Layout Specifics */
+        .filter-pills {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+        .pill {
+            background-color: #161616;
+            color: #ffffff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .pill.active {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .notification-card {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            background-color: #121212;
+            padding: 14px;
+            border-radius: 8px;
+            position: relative;
+        }
+        .notification-indicator {
+            width: 8px;
+            height: 8px;
+            background-color: #fe2c55;
+            border-radius: 50%;
+            position: absolute;
+            right: 14px;
+            top: 20px;
+        }
+
+        /* --- Immersive Live View Overlay --- */
+        .immersive-live-view {
+            display: none;
+            grid-template-columns: 1fr 340px;
+            height: 100%;
+            background-color: #000000;
+            gap: 1px;
+        }
+        .live-player-simulation {
+            background: radial-gradient(circle, #1a1525 0%, #050505 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            border-radius: 8px;
+            margin-right: 12px;
+            border: 1px solid #161616;
+        }
+        .live-badge-overlay {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background-color: #fe2c55;
+            color: #ffffff;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        .live-sidebar-simulation {
+            background-color: #0a0a0a;
+            border-left: 1px solid #161616;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .live-chat-area {
+            flex-grow: 1;
+            margin-top: 20px;
+            background-color: #121212;
+            border-radius: 6px;
+            padding: 12px;
+            color: #666;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
@@ -373,10 +542,10 @@
                 <div class="sidebar-item">
                     <span style="font-size:20px;">📺</span> LIVE
                 </div>
-                <div class="sidebar-item">
+                <div class="sidebar-item" id="messages-sidebar-tab">
                     <span style="font-size:20px;">💬</span> Messages
                 </div>
-                <div class="sidebar-item">
+                <div class="sidebar-item" id="activity-sidebar-tab">
                     <span style="font-size:20px;">🔔</span> Activity
                 </div>
                 <div class="sidebar-item">
@@ -396,11 +565,75 @@
                 </div>
             </div>
 
+            <div id="messages-drawer" class="sliding-sidebar-drawer">
+                <div class="drawer-header">
+                    <h2>Messages</h2>
+                    <button class="close-drawer-btn" id="close-messages-btn">✕</button>
+                </div>
+                <div class="message-item-placeholder">
+                    <div class="message-avatar">👤</div>
+                    <div>
+                        <div style="font-weight: 600; color: #fff; font-size: 14px;">No messages yet</div>
+                        <div style="font-size: 12px; margin-top: 2px;">Your direct chats appear here</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="activity-drawer" class="sliding-sidebar-drawer">
+                <div class="drawer-header">
+                    <h2>Notifications</h2>
+                    <button class="close-drawer-btn" id="close-activity-btn">✕</button>
+                </div>
+                <div class="filter-pills">
+                    <div class="pill active">All activity</div>
+                    <div class="pill">Likes</div>
+                    <div class="pill">Comments</div>
+                    <div class="pill">Mentions and tags</div>
+                    <div class="pill">Followers</div>
+                </div>
+                <div class="notification-card">
+                    <div class="message-avatar" style="background-color: #2b1a3a; color: #7B2CBF;">📥</div>
+                    <div style="flex-grow: 1; padding-right: 12px;">
+                        <div style="font-weight: 600; color: #fff; font-size: 14px; margin-bottom: 2px;">System Notifications</div>
+                        <div style="font-size: 12px; color: #aaa; line-height: 1.4;">LIVE: Your LIVE content sparks interest among your communities.</div>
+                    </div>
+                    <div class="notification-indicator"></div>
+                </div>
+            </div>
+
             <div class="feed-container">
                 
                 <div id="coming-soon-panel" style="display: none; padding: 40px; text-align: center; color: #888;">
                     <h2 id="coming-soon-title" style="font-weight: 400; margin-bottom: 10px;">View Coming Soon</h2>
                     <p>This panel is currently being engineered. Check back updates shortly!</p>
+                </div>
+
+                <div id="following-empty-state" class="empty-view-state">
+                    <h3>You're not following anyone</h3>
+                    <p>Discover trending creators in the "For You" or "Explore" tab to build your custom feed.</p>
+                </div>
+
+                <div id="friends-empty-state" class="empty-view-state">
+                    <h3>You don't have any friends</h3>
+                    <p>When you follow creators and they follow you back, your mutual connections will display here.</p>
+                </div>
+
+                <div id="immersive-live-panel" class="immersive-live-view">
+                    <div class="live-player-simulation">
+                        <div class="live-badge-overlay">LIVE</div>
+                        <div style="font-size: 48px; margin-bottom: 12px;">📺</div>
+                        <h3 style="margin: 0; font-size: 20px; font-weight: 500;">No one is live streaming</h3>
+                        <p style="color: #666; font-size: 14px; margin-top: 6px;">Check back later to watch interactive broadcasts.</p>
+                    </div>
+                    <div class="live-sidebar-simulation">
+                        <div>
+                            <div style="font-weight: 700; font-size: 16px;">Live Stream Host</div>
+                            <div style="color: #555; font-size: 13px; margin-top: 4px;">Offline State</div>
+                        </div>
+                        <div class="live-chat-area">
+                            Live chat interactions are currently empty.
+                        </div>
+                    </div>
                 </div>
 
                 <div class="category-tabs">
@@ -571,11 +804,20 @@
         const comingSoonTitle = document.getElementById('coming-soon-title');
         const logoHomeTrigger = document.getElementById('logo-home-trigger');
 
+        // New Interactive State Elements
+        const followingEmptyState = document.getElementById('following-empty-state');
+        const friendsEmptyState = document.getElementById('friends-empty-state');
+        const immersiveLivePanel = document.getElementById('immersive-live-panel');
+        const messagesDrawer = document.getElementById('messages-drawer');
+        const activityDrawer = document.getElementById('activity-drawer');
+        const closeMessagesBtn = document.getElementById('close-messages-btn');
+        const closeActivityBtn = document.getElementById('close-activity-btn');
+
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 authContainer.style.display = 'none';
                 mainContent.style.display = 'block';
-                // Displays exclusively the user's customized username record
+                // Only displays your chosen username cleanly
                 userEmailDisplay.textContent = `Signed in as: ${user.displayName || 'User'}`;
             } else {
                 authContainer.style.display = 'flex';
@@ -587,40 +829,72 @@
             }
         });
 
-        // Dynamic SPA Layout Navigation Logic
-        function showMainFeed() {
-            sidebarItems.forEach(i => i.classList.remove('active'));
-            sidebarItems[0].classList.add('active'); // Set "For You" as active
-            categoryTabs.style.display = 'flex';
-            videoGrid.style.display = 'grid';
+        // Dynamic View Reset Helper
+        function resetAllViewContainers() {
+            categoryTabs.style.display = 'none';
+            videoGrid.style.display = 'none';
             techSpecs.style.display = 'none';
             comingSoonPanel.style.display = 'none';
+            followingEmptyState.style.display = 'none';
+            friendsEmptyState.style.display = 'none';
+            immersiveLivePanel.style.display = 'none';
+        }
+
+        // Resets layout instantly to your standard "For You" platform feed
+        function showMainFeed() {
+            sidebarItems.forEach(i => i.classList.remove('active'));
+            sidebarItems[0].classList.add('active'); 
+            resetAllViewContainers();
+            messagesDrawer.classList.remove('open');
+            activityDrawer.classList.remove('open');
+            categoryTabs.style.display = 'flex';
+            videoGrid.style.display = 'grid';
         }
 
         logoHomeTrigger.addEventListener('click', showMainFeed);
 
+        // Sidebar Panel Drawer Window Triggers
+        closeMessagesBtn.addEventListener('click', () => messagesDrawer.classList.remove('open'));
+        closeActivityBtn.addEventListener('click', () => activityDrawer.classList.remove('open'));
+
         sidebarItems.forEach((item) => {
             item.addEventListener('click', () => {
-                sidebarItems.forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-
-                // Filter out icons to read text string accurately
+                // Read text layout strings cleanly without matching graphical emojis
                 const tabCleanName = item.textContent.replace(/[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]/g, '').trim();
 
-                if (tabCleanName === "For You") {
+                // Dynamic Side Overlay Rules (Don't alter current active tab indicators if they are sliding drawers)
+                if (tabCleanName === "Messages") {
+                    activityDrawer.classList.remove('open');
+                    messagesDrawer.classList.toggle('open');
+                    return; 
+                }
+                if (tabCleanName === "Activity") {
+                    messagesDrawer.classList.remove('open');
+                    activityDrawer.classList.toggle('open');
+                    return; 
+                }
+
+                // If regular tab is clicked, ensure any open drawers shut smoothly
+                messagesDrawer.classList.remove('open');
+                activityDrawer.classList.remove('open');
+
+                sidebarItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                resetAllViewContainers();
+
+                if (tabCleanName === "For You" || tabCleanName === "Explore") {
+                    // Explore tab displays exact duplicate structure matching primary For You feed grid
                     categoryTabs.style.display = 'flex';
                     videoGrid.style.display = 'grid';
-                    techSpecs.style.display = 'none';
-                    comingSoonPanel.style.display = 'none';
+                } else if (tabCleanName === "Following") {
+                    followingEmptyState.style.display = 'block';
+                } else if (tabCleanName === "Friends") {
+                    friendsEmptyState.style.display = 'block';
+                } else if (tabCleanName === "LIVE") {
+                    immersiveLivePanel.style.display = 'grid';
                 } else if (tabCleanName === "Specs Arch") {
-                    categoryTabs.style.display = 'none';
-                    videoGrid.style.display = 'none';
                     techSpecs.style.display = 'block';
-                    comingSoonPanel.style.display = 'none';
                 } else {
-                    categoryTabs.style.display = 'none';
-                    videoGrid.style.display = 'none';
-                    techSpecs.style.display = 'none';
                     comingSoonPanel.style.display = 'block';
                     comingSoonTitle.textContent = `${tabCleanName} View Coming Soon`;
                 }
