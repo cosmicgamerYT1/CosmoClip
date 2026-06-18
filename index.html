@@ -445,7 +445,7 @@
             justify-content: center;
             font-size: 16px;
         }
-        
+         
         /* Messages Layout Specifics */
         .message-item-placeholder {
             display: flex;
@@ -620,7 +620,7 @@
                 </div>
 
                 <div class="sidebar-divider"></div>
-                
+                 
                 <div class="sidebar-footer">
                     Company<br>
                     Programme<br>
@@ -666,7 +666,7 @@
             </div>
 
             <div class="feed-container">
-                
+                 
                 <div id="coming-soon-panel" style="display: none; padding: 40px; text-align: center; color: #888;">
                     <h2 id="coming-soon-title" style="font-weight: 400; margin-bottom: 10px;">View Coming Soon</h2>
                     <p>This panel is currently being engineered. Check back updates shortly!</p>
@@ -730,7 +730,7 @@
                 </div>
 
                 <div class="video-grid">
-                    
+                     
                     <div class="video-card">
                         <div class="thumbnail-wrapper">
                             <div class="clip-bg" style="background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.7)), url('https://picsum.photos/id/22/300/450'); background-size: cover;">⚡</div>
@@ -832,307 +832,260 @@
                     </div>
                     <div style="margin-bottom: 24px;">
                         <label style="display: block; margin-bottom: 8px; color: #aaa; font-weight: 600;">Username</label>
-                        <input type="text" id="settings-username-input" style="width: 100%; max-width: 320px; padding: 12px; border-radius: 6px; border: 1px solid #333; background: #222; color: white; outline: none;">
+                        <input type="text" id="settings-username-input" style="width: 100%; max-width: 320px; padding: 12px; border-radius: 6px; border: 1px solid #333; background: #222; color: #ffffff;">
                     </div>
-                    <button id="save-settings-btn" style="background-color: #00F5D4; color: #000; font-weight: bold; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; transition: background 0.2s;">Save Changes</button>
-                    <div id="settings-message" style="margin-top: 16px; font-size: 14px;"></div>
                 </div>
 
             </div>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { 
-            getAuth, 
-            createUserWithEmailAndPassword, 
-            signInWithEmailAndPassword, 
-            onAuthStateChanged, 
-            signOut,
-            updateProfile
-        } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Container Views
+            const authContainer = document.getElementById('auth-container');
+            const mainContent = document.getElementById('main-content');
+            
+            // Auth Inputs & Buttons
+            const loginBtn = document.getElementById('login-btn');
+            const signupBtn = document.getElementById('signup-btn');
+            const usernameInput = document.getElementById('username');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const authError = document.getElementById('auth-error');
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyCCxvnFrVUzHzVX5CtgxVlrb_i4-gMwgks",
-            authDomain: "cosmoclip-cec87.firebaseapp.com",
-            databaseURL: "https://cosmoclip-cec87-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "cosmoclip-cec87",
-            storageBucket: "cosmoclip-cec87.firebasestorage.app",
-            messagingSenderId: "542111182624",
-            appId: "1:542111182624:web:8bc7529dcd5e38d42e3145",
-            measurementId: "G-TFBVGKRXM6"
-        };
+            // Topbar elements
+            const logoHomeTrigger = document.getElementById('logo-home-trigger');
+            const headerProfilePic = document.getElementById('header-profile-pic');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            const viewProfileBtn = document.getElementById('view-profile-btn');
+            const logoutBtn = document.getElementById('logout-btn');
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+            // Sidebars & Sliding Panels
+            const sidebarItems = document.querySelectorAll('.left-sidebar .sidebar-item');
+            const messagesSidebarTab = document.getElementById('messages-sidebar-tab');
+            const activitySidebarTab = document.getElementById('activity-sidebar-tab');
+            const messagesDrawer = document.getElementById('messages-drawer');
+            const activityDrawer = document.getElementById('activity-drawer');
+            const closeMessagesBtn = document.getElementById('close-messages-btn');
+            const closeActivityBtn = document.getElementById('close-activity-btn');
 
-        const authContainer = document.getElementById('auth-container');
-        const mainContent = document.getElementById('main-content');
-        const emailInput = document.getElementById('email');
-        const usernameInput = document.getElementById('username');
-        const passwordInput = document.getElementById('password');
-        const loginBtn = document.getElementById('login-btn');
-        const signupBtn = document.getElementById('signup-btn');
-        const errorDiv = document.getElementById('auth-error');
+            // Feed View Elements
+            const categoryTabs = document.querySelector('.category-tabs');
+            const videoGrid = document.querySelector('.video-grid');
+            const comingSoonPanel = document.getElementById('coming-soon-panel');
+            const comingSoonTitle = document.getElementById('coming-soon-title');
+            const profileViewPanel = document.getElementById('profile-view-panel');
+            const followingEmptyState = document.getElementById('following-empty-state');
+            const friendsEmptyState = document.getElementById('friends-empty-state');
+            const immersiveLivePanel = document.getElementById('immersive-live-panel');
+            const settingsPanel = document.getElementById('settings-panel');
 
-        // Layout Elements for Navigation Logic
-        const sidebarItems = document.querySelectorAll('.sidebar-item');
-        const categoryTabs = document.querySelector('.category-tabs');
-        const videoGrid = document.querySelector('.video-grid');
-        const settingsPanel = document.getElementById('settings-panel');
-        const profileViewPanel = document.getElementById('profile-view-panel');
-        const comingSoonPanel = document.getElementById('coming-soon-panel');
-        const comingSoonTitle = document.getElementById('coming-soon-title');
-        const logoHomeTrigger = document.getElementById('logo-home-trigger');
+            // Settings Sync Inputs
+            const settingsUsernameInput = document.getElementById('settings-username-input');
+            const profilePageUsername = document.getElementById('profile-page-username');
+            const profilePicUpload = document.getElementById('profile-pic-upload');
+            const settingsPreviewPic = document.getElementById('settings-preview-pic');
+            const profilePagePic = document.getElementById('profile-page-pic');
 
-        // Profile Nav Elements
-        const headerProfilePic = document.getElementById('header-profile-pic');
-        const profileDropdown = document.getElementById('profile-dropdown');
-        const viewProfileBtn = document.getElementById('view-profile-btn');
-        const logoutBtn = document.getElementById('logout-btn');
+            let customProfileImageBase64 = null;
 
-        // Settings Elements
-        const profilePicUpload = document.getElementById('profile-pic-upload');
-        const settingsPreviewPic = document.getElementById('settings-preview-pic');
-        const settingsUsernameInput = document.getElementById('settings-username-input');
-        const saveSettingsBtn = document.getElementById('save-settings-btn');
-        const settingsMessage = document.getElementById('settings-message');
+            // View Management Router
+            function renderActivePanel(viewKey, fallbackTitle = '') {
+                // Clear display of all main elements
+                categoryTabs.style.display = 'none';
+                videoGrid.style.display = 'none';
+                comingSoonPanel.style.display = 'none';
+                profileViewPanel.style.display = 'none';
+                followingEmptyState.style.display = 'none';
+                friendsEmptyState.style.display = 'none';
+                immersiveLivePanel.style.display = 'none';
+                settingsPanel.style.display = 'none';
 
-        // Profile Page Elements
-        const profilePagePic = document.getElementById('profile-page-pic');
-        const profilePageUsername = document.getElementById('profile-page-username');
+                // Display targeted UI block
+                switch(viewKey) {
+                    case 'feed':
+                        categoryTabs.style.display = 'flex';
+                        videoGrid.style.display = 'grid';
+                        break;
+                    case 'following':
+                        followingEmptyState.style.display = 'block';
+                        break;
+                    case 'friends':
+                        friendsEmptyState.style.display = 'block';
+                        break;
+                    case 'live':
+                        immersiveLivePanel.style.display = 'grid';
+                        break;
+                    case 'profile':
+                        profileViewPanel.style.display = 'block';
+                        break;
+                    case 'settings':
+                        settingsPanel.style.display = 'block';
+                        break;
+                    case 'comingsoon':
+                        comingSoonTitle.textContent = fallbackTitle;
+                        comingSoonPanel.style.display = 'block';
+                        break;
+                }
+            }
 
-        // New Interactive State Elements
-        const followingEmptyState = document.getElementById('following-empty-state');
-        const friendsEmptyState = document.getElementById('friends-empty-state');
-        const immersiveLivePanel = document.getElementById('immersive-live-panel');
-        const messagesDrawer = document.getElementById('messages-drawer');
-        const activityDrawer = document.getElementById('activity-drawer');
-        const closeMessagesBtn = document.getElementById('close-messages-btn');
-        const closeActivityBtn = document.getElementById('close-activity-btn');
+            function clearSidebarSelection() {
+                sidebarItems.forEach(item => item.classList.remove('active'));
+            }
 
-        let newProfilePicBase64 = null;
+            // Mock Auth System
+            function runAuthValidation(isCreatingNewAccount) {
+                const email = emailInput.value.trim();
+                const password = passwordInput.value.trim();
+                const explicitUser = usernameInput.value.trim();
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
+                if (!email || !password) {
+                    authError.textContent = "Error: Fields cannot be blank.";
+                    return;
+                }
+                if (isCreatingNewAccount && !explicitUser) {
+                    authError.textContent = "Error: Please choose a valid username.";
+                    return;
+                }
+
+                // Determine runtime display handle
+                const systemHandle = isCreatingNewAccount ? explicitUser : email.split('@')[0];
+                settingsUsernameInput.value = systemHandle;
+                profilePageUsername.textContent = systemHandle;
+
+                // Sync base default colors if custom photo lacks asset
+                if (!customProfileImageBase64) {
+                    const fallbackAvatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(systemHandle)}&background=7B2CBF&color=fff`;
+                    headerProfilePic.src = fallbackAvatarUrl;
+                    profilePagePic.src = fallbackAvatarUrl;
+                    settingsPreviewPic.src = fallbackAvatarUrl;
+                }
+
                 authContainer.style.display = 'none';
                 mainContent.style.display = 'block';
-                
-                // Populate Profile Data safely
-                const displayAvatar = user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || 'User'}&background=222&color=fff`;
-                const displayUser = user.displayName || 'User';
+                renderActivePanel('feed');
+            }
 
-                headerProfilePic.src = displayAvatar;
-                settingsPreviewPic.src = displayAvatar;
-                profilePagePic.src = displayAvatar;
-                
-                settingsUsernameInput.value = displayUser;
-                profilePageUsername.textContent = displayUser;
+            loginBtn.addEventListener('click', () => runAuthValidation(false));
+            signupBtn.addEventListener('click', () => runAuthValidation(true));
 
-            } else {
-                authContainer.style.display = 'flex';
+            logoutBtn.addEventListener('click', () => {
                 mainContent.style.display = 'none';
+                authContainer.style.display = 'flex';
                 emailInput.value = '';
                 passwordInput.value = '';
                 usernameInput.value = '';
+                authError.textContent = '';
+            });
+
+            // Contextual Dropdown Systems
+            headerProfilePic.addEventListener('click', (event) => {
+                event.stopPropagation();
+                profileDropdown.classList.toggle('show');
+            });
+
+            document.addEventListener('click', () => {
                 profileDropdown.classList.remove('show');
-            }
-        });
+            });
 
-        // Dropdown toggle logic
-        headerProfilePic.addEventListener('click', (e) => {
-            e.stopPropagation();
-            profileDropdown.classList.toggle('show');
-        });
+            viewProfileBtn.addEventListener('click', () => {
+                clearSidebarSelection();
+                renderActivePanel('profile');
+            });
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', () => {
-            if (profileDropdown.classList.contains('show')) {
-                profileDropdown.classList.remove('show');
-            }
-        });
+            logoHomeTrigger.addEventListener('click', () => {
+                clearSidebarSelection();
+                sidebarItems[0].classList.add('active');
+                renderActivePanel('feed');
+            });
 
-        // View Profile Dropdown Action
-        viewProfileBtn.addEventListener('click', () => {
-            sidebarItems.forEach(i => i.classList.remove('active'));
-            resetAllViewContainers();
-            profileViewPanel.style.display = 'block';
-            profileDropdown.classList.remove('show');
-            messagesDrawer.classList.remove('open');
-            activityDrawer.classList.remove('open');
-        });
+            // Master Navigation Event Loop
+            sidebarItems.forEach((tab) => {
+                tab.addEventListener('click', () => {
+                    // Check if tab belongs to standalone overlay draws
+                    if (tab === messagesSidebarTab) {
+                        activityDrawer.classList.remove('open');
+                        messagesDrawer.classList.toggle('open');
+                        return;
+                    }
+                    if (tab === activitySidebarTab) {
+                        messagesDrawer.classList.remove('open');
+                        activityDrawer.classList.toggle('open');
+                        return;
+                    }
 
-        // Dynamic View Reset Helper
-        function resetAllViewContainers() {
-            categoryTabs.style.display = 'none';
-            videoGrid.style.display = 'none';
-            settingsPanel.style.display = 'none';
-            profileViewPanel.style.display = 'none';
-            comingSoonPanel.style.display = 'none';
-            followingEmptyState.style.display = 'none';
-            friendsEmptyState.style.display = 'none';
-            immersiveLivePanel.style.display = 'none';
-            settingsMessage.textContent = "";
-        }
-
-        // Resets layout instantly to your standard "For You" platform feed
-        function showMainFeed() {
-            sidebarItems.forEach(i => i.classList.remove('active'));
-            sidebarItems[0].classList.add('active'); 
-            resetAllViewContainers();
-            messagesDrawer.classList.remove('open');
-            activityDrawer.classList.remove('open');
-            categoryTabs.style.display = 'flex';
-            videoGrid.style.display = 'grid';
-        }
-
-        logoHomeTrigger.addEventListener('click', showMainFeed);
-
-        // Sidebar Panel Drawer Window Triggers
-        closeMessagesBtn.addEventListener('click', () => messagesDrawer.classList.remove('open'));
-        closeActivityBtn.addEventListener('click', () => activityDrawer.classList.remove('open'));
-
-        sidebarItems.forEach((item) => {
-            item.addEventListener('click', () => {
-                // Read text layout strings cleanly without matching graphical emojis
-                const tabCleanName = item.textContent.replace(/[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]/g, '').trim();
-
-                // Dynamic Side Overlay Rules (Don't alter current active tab indicators if they are sliding drawers)
-                if (tabCleanName === "Messages") {
-                    activityDrawer.classList.remove('open');
-                    messagesDrawer.classList.toggle('open');
-                    return; 
-                }
-                if (tabCleanName === "Activity") {
+                    // Standard page tabs dismiss active side drawers
                     messagesDrawer.classList.remove('open');
-                    activityDrawer.classList.toggle('open');
-                    return; 
-                }
+                    activityDrawer.classList.remove('open');
 
-                // If regular tab is clicked, ensure any open drawers shut smoothly
-                messagesDrawer.classList.remove('open');
-                activityDrawer.classList.remove('open');
+                    clearSidebarSelection();
+                    tab.classList.add('active');
 
-                sidebarItems.forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-                resetAllViewContainers();
+                    const formattedLabel = tab.textContent.toLowerCase();
+                    if (formattedLabel.includes('for you') || formattedLabel.includes('explore')) {
+                        renderActivePanel('feed');
+                    } else if (formattedLabel.includes('following')) {
+                        renderActivePanel('following');
+                    } else if (formattedLabel.includes('friends')) {
+                        renderActivePanel('friends');
+                    } else if (formattedLabel.includes('live')) {
+                        renderActivePanel('live');
+                    } else if (formattedLabel.includes('upload')) {
+                        renderActivePanel('comingsoon', 'Upload Channel Controller');
+                    } else if (formattedLabel.includes('settings')) {
+                        renderActivePanel('settings');
+                    }
+                });
+            });
 
-                if (tabCleanName === "For You" || tabCleanName === "Explore") {
-                    categoryTabs.style.display = 'flex';
-                    videoGrid.style.display = 'grid';
-                } else if (tabCleanName === "Following") {
-                    followingEmptyState.style.display = 'block';
-                } else if (tabCleanName === "Friends") {
-                    friendsEmptyState.style.display = 'block';
-                } else if (tabCleanName === "LIVE") {
-                    immersiveLivePanel.style.display = 'grid';
-                } else if (tabCleanName === "Settings") {
-                    settingsPanel.style.display = 'block';
-                } else {
-                    comingSoonPanel.style.display = 'block';
-                    comingSoonTitle.textContent = `${tabCleanName} View Coming Soon`;
+            // Overlay Dismiss Hooks
+            closeMessagesBtn.addEventListener('click', () => messagesDrawer.classList.remove('open'));
+            closeActivityBtn.addEventListener('click', () => activityDrawer.classList.remove('open'));
+
+            // Horizontal Tab Array Binding
+            const nestedCategoryItems = document.querySelectorAll('.category-tabs .tab-item');
+            nestedCategoryItems.forEach(categoryTab => {
+                categoryTab.addEventListener('click', () => {
+                    nestedCategoryItems.forEach(t => t.classList.remove('active'));
+                    categoryTab.classList.add('active');
+                });
+            });
+
+            // Notification Pill Binding
+            const activityPillItems = document.querySelectorAll('.filter-pills .pill');
+            activityPillItems.forEach(pill => {
+                pill.addEventListener('click', () => {
+                    activityPillItems.forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                });
+            });
+
+            // Reactive Profile Settings Form Binding
+            profilePicUpload.addEventListener('change', (event) => {
+                const structuralTargetFile = event.target.files[0];
+                if (structuralTargetFile) {
+                    const streamReader = new FileReader();
+                    streamReader.onload = function(e) {
+                        customProfileImageBase64 = e.target.result;
+                        settingsPreviewPic.src = customProfileImageBase64;
+                        headerProfilePic.src = customProfileImageBase64;
+                        profilePagePic.src = customProfileImageBase64;
+                    };
+                    streamReader.readAsDataURL(structuralTargetFile);
                 }
             });
-        });
 
-        // Profile Picture File Upload Preview
-        profilePicUpload.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    newProfilePicBase64 = event.target.result;
-                    settingsPreviewPic.src = newProfilePicBase64;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Save Settings Action
-        saveSettingsBtn.addEventListener('click', async () => {
-            if (!auth.currentUser) return;
-            
-            settingsMessage.textContent = "Saving changes...";
-            settingsMessage.style.color = "#aaa";
-
-            try {
-                const updates = {};
-                const newUsername = settingsUsernameInput.value.trim();
+            settingsUsernameInput.addEventListener('input', (event) => {
+                const dynamicCurrentText = event.target.value.trim() || "Username";
+                profilePageUsername.textContent = dynamicCurrentText;
                 
-                if (newUsername !== "") {
-                    updates.displayName = newUsername;
+                if (!customProfileImageBase64) {
+                    const modifiedAvatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(dynamicCurrentText)}&background=7B2CBF&color=fff`;
+                    headerProfilePic.src = modifiedAvatarUrl;
+                    profilePagePic.src = modifiedAvatarUrl;
+                    settingsPreviewPic.src = modifiedAvatarUrl;
                 }
-                if (newProfilePicBase64) {
-                    updates.photoURL = newProfilePicBase64;
-                }
-
-                if (Object.keys(updates).length > 0) {
-                    await updateProfile(auth.currentUser, updates);
-                    
-                    // Immediately visually update the DOM without needing a full page reload
-                    if (updates.photoURL) {
-                        headerProfilePic.src = updates.photoURL;
-                        profilePagePic.src = updates.photoURL;
-                    }
-                    if (updates.displayName) {
-                        profilePageUsername.textContent = updates.displayName;
-                    }
-                    
-                    settingsMessage.textContent = "Settings successfully updated!";
-                    settingsMessage.style.color = "#00F5D4";
-                } else {
-                    settingsMessage.textContent = "No changes were made.";
-                    settingsMessage.style.color = "#ff4d4d";
-                }
-            } catch (error) {
-                settingsMessage.textContent = "Error updating profile: " + error.message;
-                settingsMessage.style.color = "#ff4d4d";
-            }
-        });
-
-        signupBtn.addEventListener('click', async () => {
-            errorDiv.textContent = "";
-            const email = emailInput.value;
-            const password = passwordInput.value;
-            const username = usernameInput.value;
-            
-            if(!email || !password) {
-                errorDiv.textContent = "Please enter an email and password.";
-                return;
-            }
-
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                await updateProfile(userCredential.user, { displayName: username || "User" });
-                console.log("Account created successfully with profile username!");
-            } catch (error) {
-                errorDiv.textContent = error.message;
-            }
-        });
-
-        loginBtn.addEventListener('click', () => {
-            errorDiv.textContent = "";
-            const email = emailInput.value;
-            const password = passwordInput.value;
-
-            if(!email || !password) {
-                errorDiv.textContent = "Please enter an email and password.";
-                return;
-            }
-
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    console.log("Logged in successfully!");
-                })
-                .catch((error) => {
-                    errorDiv.textContent = error.message;
-                });
-        });
-
-        logoutBtn.addEventListener('click', () => {
-            signOut(auth).catch((error) => {
-                console.error("Logout Error:", error);
             });
         });
     </script>
