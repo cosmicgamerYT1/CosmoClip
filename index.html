@@ -344,7 +344,7 @@
 
     <div id="main-content">
         <div class="top-navbar">
-            <div class="logo-area">
+            <div class="logo-area" id="logo-home-trigger" style="cursor: pointer;">
                 <h2>Cosmo<span>Clips</span></h2>
             </div>
             <div class="search-box-container">
@@ -382,7 +382,7 @@
                 <div class="sidebar-item">
                     <span style="font-size:20px;">📤</span> Upload
                 </div>
-                <div class="sidebar-item" onclick="document.getElementById('tech-specs').style.display='block'">
+                <div class="sidebar-item">
                     <span style="font-size:20px;">⚙️</span> Specs Arch
                 </div>
 
@@ -397,6 +397,12 @@
             </div>
 
             <div class="feed-container">
+                
+                <div id="coming-soon-panel" style="display: none; padding: 40px; text-align: center; color: #888;">
+                    <h2 id="coming-soon-title" style="font-weight: 400; margin-bottom: 10px;">View Coming Soon</h2>
+                    <p>This panel is currently being engineered. Check back updates shortly!</p>
+                </div>
+
                 <div class="category-tabs">
                     <div class="tab-item">All</div>
                     <div class="tab-item active">FIFA World Cup 2026™</div>
@@ -556,12 +562,21 @@
         const errorDiv = document.getElementById('auth-error');
         const userEmailDisplay = document.getElementById('user-email-display');
 
+        // Layout Elements for Navigation Logic
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+        const categoryTabs = document.querySelector('.category-tabs');
+        const videoGrid = document.querySelector('.video-grid');
+        const techSpecs = document.getElementById('tech-specs');
+        const comingSoonPanel = document.getElementById('coming-soon-panel');
+        const comingSoonTitle = document.getElementById('coming-soon-title');
+        const logoHomeTrigger = document.getElementById('logo-home-trigger');
+
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 authContainer.style.display = 'none';
                 mainContent.style.display = 'block';
-                // Displays the user's customized username if it exists, otherwise defaults to email
-                userEmailDisplay.textContent = `Signed in as: ${user.displayName || 'User'} (${user.email})`;
+                // Displays exclusively the user's customized username record
+                userEmailDisplay.textContent = `Signed in as: ${user.displayName || 'User'}`;
             } else {
                 authContainer.style.display = 'flex';
                 mainContent.style.display = 'none';
@@ -570,6 +585,46 @@
                 passwordInput.value = '';
                 usernameInput.value = '';
             }
+        });
+
+        // Dynamic SPA Layout Navigation Logic
+        function showMainFeed() {
+            sidebarItems.forEach(i => i.classList.remove('active'));
+            sidebarItems[0].classList.add('active'); // Set "For You" as active
+            categoryTabs.style.display = 'flex';
+            videoGrid.style.display = 'grid';
+            techSpecs.style.display = 'none';
+            comingSoonPanel.style.display = 'none';
+        }
+
+        logoHomeTrigger.addEventListener('click', showMainFeed);
+
+        sidebarItems.forEach((item) => {
+            item.addEventListener('click', () => {
+                sidebarItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+
+                // Filter out icons to read text string accurately
+                const tabCleanName = item.textContent.replace(/[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]/g, '').trim();
+
+                if (tabCleanName === "For You") {
+                    categoryTabs.style.display = 'flex';
+                    videoGrid.style.display = 'grid';
+                    techSpecs.style.display = 'none';
+                    comingSoonPanel.style.display = 'none';
+                } else if (tabCleanName === "Specs Arch") {
+                    categoryTabs.style.display = 'none';
+                    videoGrid.style.display = 'none';
+                    techSpecs.style.display = 'block';
+                    comingSoonPanel.style.display = 'none';
+                } else {
+                    categoryTabs.style.display = 'none';
+                    videoGrid.style.display = 'none';
+                    techSpecs.style.display = 'none';
+                    comingSoonPanel.style.display = 'block';
+                    comingSoonTitle.textContent = `${tabCleanName} View Coming Soon`;
+                }
+            });
         });
 
         signupBtn.addEventListener('click', async () => {
@@ -585,7 +640,6 @@
 
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                // Sets the visual display name inside the Firebase authentication record
                 await updateProfile(userCredential.user, { displayName: username || "User" });
                 console.log("Account created successfully with profile username!");
             } catch (error) {
